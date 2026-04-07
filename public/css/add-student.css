@@ -1,0 +1,279 @@
+/* add-student.css */
+/* ============================================= */
+/* Premium Smooth UX - Updated for new fields (DOB, Category, Class + Course) */
+/* Fully consistent with Dashboard & View Students */
+/* NEW: Guardian Phone with checkbox styling added */
+/* ============================================= */
+
+:root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --radius: 16px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    padding: 20px;
+}
+
+/* Layout Container */
+.container {
+    width: 100%;
+    max-width: 620px;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.96);
+    padding: 42px 40px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: var(--transition);
+}
+
+/* Header */
+header {
+    margin-bottom: 34px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+header p {
+    font-size: 0.97rem;
+    color: var(--text-muted);
+}
+
+/* Form */
+.student-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+/* Row Layout */
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+/* Labels */
+label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-left: 4px;
+}
+
+/* Inputs, Selects & Textarea */
+input, select, textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+    outline: none;
+    color: var(--text-main);
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+    background-position: right 16px center;
+    background-repeat: no-repeat;
+    background-size: 14px;
+    padding-right: 42px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    transform: translateY(-1px);
+}
+
+/* Textarea */
+textarea {
+    min-height: 108px;
+    resize: vertical;
+}
+
+/* ====================== NEW STYLES FOR GUARDIAN PHONE CHECKBOX ====================== */
+.input-with-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 4px;
+    transition: var(--transition);
+}
+
+.input-with-checkbox:focus-within {
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.input-with-checkbox input[type="tel"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 13px 16px;
+    border-radius: 8px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    white-space: nowrap;
+    cursor: pointer;
+    padding-right: 12px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+/* Smooth Course Group Animation */
+#courseGroup {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    opacity: 1;
+}
+
+#courseGroup[style*="display: none"] {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Submit Button */
+.btn-submit {
+    margin-top: 12px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary);
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 6px 12px -2px rgba(99, 102, 241, 0.3);
+}
+
+.btn-submit:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 20px -4px rgba(99, 102, 241, 0.4);
+}
+
+/* Back Button */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: var(--transition);
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: #f1f5f9;
+}
+
+.btn-back:hover {
+    color: var(--primary);
+    background: #eef2ff;
+    transform: translateX(-2px);
+}
+
+.btn-back .arrow {
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .glass-card {
+        padding: 28px 24px;
+    }
+    
+    .row {
+        grid-template-columns: 1fr; /* Stack on mobile */
+        gap: 16px;
+    }
+    
+    .input-with-checkbox {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    header h1 {
+        font-size: 1.65rem;
+    }
+}
+
+/* Optional: Subtle entrance animation */
+.glass-card {
+    animation: fadeInUp 0.6s ease backwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Admission | Gazzali-Academy</title>
+    <link rel="stylesheet" href="/css/add-student.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="glass-card">
+            <a href="/" class="btn-back">
+                <span class="arrow">←</span> Back to Dashboard
+            </a>
+            <header>
+                <h1>Student Admission</h1>
+                <p>Enter details to register a new student in the database.</p>
+            </header>
+
+            <form action="/students/add" method="POST" class="student-form" id="studentForm">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="e.g. Ahmed Mohammed" required>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Hifz">Hifz</option>
+                            <option value="Junior Shareeath">Junior Shareeath</option>
+                            <option value="Dars">Dars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Class</label>
+                        <select name="class" id="classSelect" required>
+                            <option value="">Select Class</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="Plus One">Plus One</option>
+                            <option value="Plus Two">Plus Two</option>
+                            <option value="Degree">Degree</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="courseGroup" style="display: none;">
+                        <label>Course (Only for Plus One & Plus Two)</label>
+                        <select name="course" id="courseSelect">
+                            <option value="">Select Course</option>
+                            <option value="Humanities">Humanities</option>
+                            <option value="Commerce">Commerce</option>
+                            <option value="Science">Science</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Parent/Guardian Name</label>
+                        <input type="text" name="parentName" placeholder="e.g. Abdul Rahman" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number <span style="font-size:0.8rem; font-weight:400; color:#64748b;">(Student's / Main Contact)</span></label>
+                        <input type="tel" name="phone" id="phoneInput" placeholder="" required>
+                    </div>
+                </div>
+
+                <!-- NEW: Guardian Phone Number with "Same as Phone Number" checkbox -->
+                <div class="form-group">
+                    <label>Guardian's Phone Number</label>
+                    <div class="input-with-checkbox">
+                        <input type="tel" name="guardianPhone" id="guardianPhoneInput" placeholder="" required>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="samePhoneCheckbox">
+                            Same as Phone Number
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Place</label>
+                        <input type="text" name="place" placeholder="City / Village" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Admission Date</label>
+                        <input type="date" name="admissionDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <textarea name="address" placeholder="House No, Street, Post Office, Pincode" rows="3" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Confirm Registration</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const classSelect = document.getElementById('classSelect');
+        const courseGroup = document.getElementById('courseGroup');
+        const courseSelect = document.getElementById('courseSelect');
+        const studentForm = document.getElementById('studentForm');
+
+        // Show/Hide Course field
+        classSelect.addEventListener('change', function() {
+            if (this.value === 'Plus One' || this.value === 'Plus Two') {
+                courseGroup.style.display = 'block';
+                courseSelect.required = true;
+            } else {
+                courseGroup.style.display = 'none';
+                courseSelect.required = false;
+                courseSelect.value = '';           // Clear value
+            }
+        });
+
+        // ✅ IMPORTANT: Remove course field from form submission when not needed
+        studentForm.addEventListener('submit', function(e) {
+            const selectedClass = classSelect.value;
+            
+            // If class is not Plus One or Plus Two, remove the course field completely
+            if (selectedClass !== 'Plus One' && selectedClass !== 'Plus Two') {
+                courseSelect.removeAttribute('name');   // This prevents it from being sent
+            }
+        });
+
+        // ====================== NEW: Guardian Phone Auto-Fill Feature ======================
+        const phoneInput = document.getElementById('phoneInput');
+        const guardianPhoneInput = document.getElementById('guardianPhoneInput');
+        const samePhoneCheckbox = document.getElementById('samePhoneCheckbox');
+
+        // Function to copy phone value
+        function copyPhoneToGuardian() {
+            if (samePhoneCheckbox.checked && phoneInput.value.trim() !== '') {
+                guardianPhoneInput.value = phoneInput.value;
+            }
+        }
+
+        // Checkbox click → copy immediately
+        samePhoneCheckbox.addEventListener('change', function() {
+            copyPhoneToGuardian();
+        });
+
+        // If user types in main Phone Number while checkbox is checked → live update
+        phoneInput.addEventListener('input', function() {
+            if (samePhoneCheckbox.checked) {
+                copyPhoneToGuardian();
+            }
+        });
+
+        // Optional: If user clears the main phone, also clear guardian when checked
+        phoneInput.addEventListener('blur', function() {
+            if (samePhoneCheckbox.checked && phoneInput.value.trim() === '') {
+                guardianPhoneInput.value = '';
+            }
+        });
+        // ================================================================================
+    </script>
+
+</body>
+</html>

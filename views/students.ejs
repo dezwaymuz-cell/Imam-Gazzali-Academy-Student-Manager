@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Directory | Gazzali-Academy</title>
+    <link rel="stylesheet" href="/css/view-students.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span class="toast-icon">✓</span>
+        <span id="toast-message">Action successful!</span>
+    </div>
+
+    <div class="container-wide">
+
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <a href="/" class="btn-back">
+                <span class="arrow">←</span> Back to Dashboard
+            </a>
+
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔎</span>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search by name, parent, place, class or phone..."
+                        autocomplete="off">
+                </div>
+            </div>
+
+            <a href="/students/new" class="btn-primary">
+                <span class="plus-icon">+</span> Add New Student
+            </a>
+        </div>
+
+        <!-- Page Header -->
+        <header class="directory-header">
+            <div class="header-content">
+                <h1>Student Directory</h1>
+                <p id="studentCount">Showing <strong><%= st.length %></strong> registered students</p>
+            </div>
+        </header>
+
+        <!-- Category Filters - Modern pill buttons -->
+        <div class="category-filters" id="categoryFilters">
+            <button class="filter-pill active" data-filter="all">All Categories</button>
+            <button class="filter-pill" data-filter="hifz">Hifz</button>
+            <button class="filter-pill" data-filter="junior shareeath">Junior Shareeath</button>
+            <button class="filter-pill" data-filter="dars">Dars</button>
+        </div>
+
+        <!-- Student Grid -->
+        <div class="student-grid" id="studentGrid">
+            <% if (st.length > 0) { %>
+                <% st.forEach(student => { %>
+                    <div class="student-card" 
+                         data-name="<%= student.name.toLowerCase() %>"
+                         data-parent="<%= student.parentName.toLowerCase() %>"
+                         data-place="<%= student.place.toLowerCase() %>"
+                         data-class="<%= student.class.toLowerCase() %>"
+                         data-phone="<%= (student.phone || '').toLowerCase() %>"
+                         data-guardian-phone="<%= (student.guardianPhone || '').toLowerCase() %>"
+                         data-category="<%= (student.category || '').toLowerCase() %>">
+
+                        <!-- Card Header -->
+                        <div class="card-header">
+                            <span class="class-badge"><%= student.class %></span>
+                            <% if (student.category) { %>
+                                <span class="category-badge"><%= student.category %></span>
+                            <% } %>
+                            <div class="card-actions">
+                                <button class="icon-btn edit-btn" title="Edit Student"
+                                    onclick="openEditModal(
+                                        '<%= student._id %>', 
+                                        '<%= student.name %>', 
+                                        '<%= student.class %>', 
+                                        '<%= student.phone %>', 
+                                        '<%= student.place %>', 
+                                        '<%= student.parentName %>', 
+                                        '<%= student.address %>', 
+                                        '<%= student.dateOfBirth ? student.dateOfBirth.toISOString().split('T')[0] : "" %>', 
+                                        '<%= student.category || "" %>',
+                                        '<%= student.guardianPhone || "" %>'
+                                    )">
+                                    ✏️
+                                </button>
+                                <button class="icon-btn delete-btn" title="Delete Student"
+                                    onclick="confirmDelete('<%= student._id %>', '<%= student.name %>')">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <h3 class="student-name"><%= student.name %></h3>
+                            <p class="parent-name">
+                                <span class="label">Guardian</span>
+                                <%= student.parentName %>
+                            </p>
+
+                            <div class="info-grid">
+                                <!-- Student Phone -->
+                                <div class="info-item">
+                                    <span class="icon">📞</span>
+                                    <div>
+                                        <span class="value"><%= student.phone %></span>
+                                        <small>Student</small>
+                                    </div>
+                                </div>
+                                <!-- Guardian Phone -->
+                                <div class="info-item">
+                                    <span class="icon">📱</span>
+                                    <div>
+                                        <span class="value"><%= student.guardianPhone || '—' %></span>
+                                        <small>Guardian</small>
+                                    </div>
+                                </div>
+                                <!-- Place -->
+                                <div class="info-item">
+                                    <span class="icon">📍</span>
+                                    <span class="value"><%= student.place %></span>
+                                </div>
+                            </div>
+
+                            <% if (student.dateOfBirth) { %>
+                            <div class="extra-info">
+                                <span class="label">Date of Birth</span>
+                                <span><%= new Date(student.dateOfBirth).toLocaleDateString('en-GB') %></span>
+                            </div>
+                            <% } %>
+
+                            <div class="address-preview">
+                                <span class="icon">🏠</span>
+                                <%= student.address %>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="card-footer">
+                            <small class="joined-date">
+                                Admitted • <%= new Date(student.admissionDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                            </small>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <!-- Empty State (no students at all) -->
+                <div class="empty-state">
+                    <div class="empty-illustration">📚</div>
+                    <h3>No students found</h3>
+                    <p>The database is currently empty.<br>Start by adding your first student.</p>
+                    <a href="/students/new" class="btn-primary empty-cta">Add First Student</a>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Filter No Results State -->
+        <div id="noResults" class="empty-state" style="display: none;">
+            <div class="empty-illustration">🔎</div>
+            <h3>No matching students</h3>
+            <p>We couldn't find any students that match your search and category filter.</p>
+            <button onclick="resetFilters()" class="btn-primary">Clear All Filters</button>
+        </div>
+
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Student Profile</h2>
+                <p>Make changes to the student information below.</p>
+            </div>
+
+            <form id="editForm" action="/students/update" method="POST" class="modal-form">
+                <input type="hidden" name="id" id="edit-id">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" id="edit-name" required>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dateOfBirth" id="edit-dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" id="edit-category" required>
+                            <option value="Hifz">Hifz</option>
+                            <option value="Junior Shareeath">Junior Shareeath</option>
+                            <option value="Dars">Dars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Class</label>
+                        <input type="text" name="class" id="edit-class" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number <span style="font-size:0.8rem; font-weight:400; color:#64748b;">(Student's / Main Contact)</span></label>
+                        <input type="tel" name="phone" id="edit-phone" required>
+                    </div>
+                </div>
+
+                <!-- Guardian Phone Number with checkbox -->
+                <div class="form-group">
+                    <label>Guardian's Phone Number</label>
+                    <div class="input-with-checkbox">
+                        <input type="tel" name="guardianPhone" id="edit-guardianPhone" required>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="edit-samePhoneCheckbox">
+                            Same as Phone Number
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Parent / Guardian</label>
+                        <input type="text" name="parentName" id="edit-parent" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Place</label>
+                        <input type="text" name="place" id="edit-place" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <textarea name="address" id="edit-address" rows="3" required></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('editModal')">Cancel</button>
+                    <button type="submit" class="btn-submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content delete-modal">
+            <div class="warning-icon">⚠️</div>
+            <h2>Delete Student?</h2>
+            <p>Are you sure you want to permanently remove <strong id="delete-student-name"></strong> from the database?<br>This action cannot be undone.</p>
+            
+            <form id="deleteForm" method="POST">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+                    <button type="submit" class="btn-danger">Yes, Delete Permanently</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Total students count (from EJS)
+        const totalStudents = <%= st.length %>;
+
+        // Combined search + category filter
+        function applyFilters() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
+            const activePill = document.querySelector('.filter-pill.active');
+            const filterCategory = activePill ? activePill.dataset.filter : 'all';
+
+            const cards = document.querySelectorAll('.student-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const name          = card.getAttribute('data-name') || '';
+                const parent        = card.getAttribute('data-parent') || '';
+                const place         = card.getAttribute('data-place') || '';
+                const cls           = card.getAttribute('data-class') || '';
+                const phone         = card.getAttribute('data-phone') || '';
+                const guardianPhone = card.getAttribute('data-guardian-phone') || '';
+                const category      = card.getAttribute('data-category') || '';
+
+                // Search match (any field)
+                const matchesSearch = !searchInput || 
+                    name.includes(searchInput) ||
+                    parent.includes(searchInput) ||
+                    place.includes(searchInput) ||
+                    cls.includes(searchInput) ||
+                    phone.includes(searchInput) ||
+                    guardianPhone.includes(searchInput);
+
+                // Category match
+                const matchesCategory = filterCategory === 'all' || category === filterCategory;
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Update count text
+            const countEl = document.getElementById('studentCount');
+            if (visibleCount === totalStudents) {
+                countEl.innerHTML = `Showing <strong>${totalStudents}</strong> registered students`;
+            } else {
+                countEl.innerHTML = `Showing <strong>${visibleCount}</strong> of <strong>${totalStudents}</strong> students`;
+            }
+
+            // Show/hide no-results state
+            const noResults = document.getElementById('noResults');
+            const grid = document.getElementById('studentGrid');
+            
+            if (visibleCount === 0 && totalStudents > 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+            }
+        }
+
+        // Reset both search and category filter
+        function resetFilters() {
+            // Clear search
+            document.getElementById('searchInput').value = '';
+            
+            // Reset pills to "All"
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.dataset.filter === 'all') pill.classList.add('active');
+            });
+
+            // Re-apply filters
+            applyFilters();
+        }
+
+        // Open Edit Modal (unchanged)
+        function openEditModal(id, name, className, phone, place, parent, address, dateOfBirth, category, guardianPhone) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-name').value = name || '';
+            document.getElementById('edit-class').value = className || '';
+            document.getElementById('edit-phone').value = phone || '';
+            document.getElementById('edit-place').value = place || '';
+            document.getElementById('edit-parent').value = parent || '';
+            document.getElementById('edit-address').value = address || '';
+
+            document.getElementById('edit-dob').value = dateOfBirth || '';
+
+            const categorySelect = document.getElementById('edit-category');
+            if (category && categorySelect) categorySelect.value = category;
+
+            const guardianInput = document.getElementById('edit-guardianPhone');
+            guardianInput.value = guardianPhone || '';
+
+            const sameCheckbox = document.getElementById('edit-samePhoneCheckbox');
+            sameCheckbox.checked = (phone && guardianPhone && phone === guardianPhone);
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        // Delete Confirmation (unchanged)
+        function confirmDelete(id, name) {
+            document.getElementById('delete-student-name').innerText = name;
+            document.getElementById('deleteForm').action = `/students/delete/${id}`;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        // Close Modal (unchanged)
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Guardian phone checkbox logic in edit modal (unchanged)
+        function initGuardianPhoneEdit() {
+            const editPhoneInput = document.getElementById('edit-phone');
+            const editGuardianPhoneInput = document.getElementById('edit-guardianPhone');
+            const editSameCheckbox = document.getElementById('edit-samePhoneCheckbox');
+
+            if (!editPhoneInput || !editGuardianPhoneInput || !editSameCheckbox) return;
+
+            function copyPhoneToGuardianEdit() {
+                if (editSameCheckbox.checked && editPhoneInput.value.trim() !== '') {
+                    editGuardianPhoneInput.value = editPhoneInput.value;
+                }
+            }
+
+            editSameCheckbox.addEventListener('change', copyPhoneToGuardianEdit);
+            editPhoneInput.addEventListener('input', () => {
+                if (editSameCheckbox.checked) copyPhoneToGuardianEdit();
+            });
+            editPhoneInput.addEventListener('blur', () => {
+                if (editSameCheckbox.checked && editPhoneInput.value.trim() === '') {
+                    editGuardianPhoneInput.value = '';
+                }
+            });
+        }
+
+        // Toast Notification (unchanged)
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.add('active');
+            setTimeout(() => toast.classList.remove('active'), 3000);
+        }
+
+        // Initialize everything
+        window.onload = function() {
+            const searchInput = document.getElementById('searchInput');
+
+            // Auto-focus search on desktop only
+            if (window.innerWidth > 768) {
+                searchInput.focus();
+            }
+
+            // Live search
+            searchInput.addEventListener('input', applyFilters);
+
+            // Category pill clicks
+            const pills = document.querySelectorAll('.filter-pill');
+            pills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    // Remove active from all
+                    pills.forEach(p => p.classList.remove('active'));
+                    // Activate clicked pill
+                    this.classList.add('active');
+                    // Run combined filter
+                    applyFilters();
+                });
+            });
+
+            // Initialize guardian phone checkbox in edit modal
+            initGuardianPhoneEdit();
+
+            // Escape key for modals
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape") {
+                    const activeModals = document.querySelectorAll('.modal-overlay.active');
+                    if (activeModals.length > 0) {
+                        closeModal(activeModals[0].id);
+                    }
+                }
+            });
+
+            // Initial filter run (in case of any pre-filter needs)
+            applyFilters();
+        };
+    </script>
+</body>
+</html>
