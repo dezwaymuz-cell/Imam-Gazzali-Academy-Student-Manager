@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const {saveStudent,getStudents,deleteStudent,updateStudent} = require('../controllers/studentController')
+const { isLoggedIn } = require('../middlewares/authMiddleware');
+
+router.use(isLoggedIn);
 
 router.post('/add', (req, res) => {
   console.log(req.body);
@@ -37,5 +40,7 @@ updateStudent(req.body.id,req.body)
       res.redirect('/students')
     })
 })
+
+
 
 module.exports = router;

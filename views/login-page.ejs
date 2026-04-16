@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academy Portal | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div class="bg-canvas"></div>
+    <div class="orb w-[500px] h-[500px] bg-indigo-100 top-[-10%] right-[-5%]"></div>
+    <div class="orb w-[400px] h-[400px] bg-blue-50 bottom-[-5%] left-[-5%]" style="animation-delay: -7s;"></div>
+
+    <div class="w-full max-w-md academy-card rounded-[2rem] p-10 md:p-12 entrance">
+        
+        <!-- Logo Space -->
+        <div class="flex flex-col items-center mb-10">
+            <div class="w-20 h-20 bg-indigo-600 rounded-2xl mb-6 shadow-lg shadow-indigo-200 flex items-center justify-center overflow-hidden">
+                <!-- Replace the SVG below with your actual <img> tag -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Academy Portal</h1>
+            <p class="text-slate-500 text-sm mt-1">Please sign in to your workspace</p>
+        </div>
+
+        <!-- Error Message Display Area (EJS Integration) -->
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div id="error-container" class="mb-6">
+            <div class="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl text-sm flex items-center gap-3 error-shake">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span id="error-text"><%= error %></span>
+            </div>
+        </div>
+        <% } %>
+
+        <!-- Form: Set up for EJS flow -->
+        <form action="/login" method="POST" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Username</label>
+                <input type="text" 
+                       name="username" 
+                       placeholder="Enter username" 
+                       required
+                       class="input-field w-full px-5 py-4 rounded-xl text-slate-800 placeholder-slate-400">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Password</label>
+                <input type="password" 
+                       name="password" 
+                       placeholder="••••••••" 
+                       required
+                       class="input-field w-full px-5 py-4 rounded-xl text-slate-800 placeholder-slate-400">
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" 
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-[0.98] focus:ring-4 focus:ring-indigo-100">
+                    Login to Portal
+                </button>
+            </div>
+        </form>
+
+        <!-- Academic Footer -->
+        <div class="mt-12 pt-8 border-t border-slate-100 text-center">
+            <p class="text-xs text-slate-400">
+                &copy; 2026 Imam Gazzali Academy • Professional Education Management<br>
+                
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Auto-hide error after 5 seconds for a smoother experience
+        window.onload = () => {
+            const err = document.getElementById('error-container');
+            if(err) {
+                setTimeout(() => {
+                    err.style.opacity = '0';
+                    err.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => err.style.display = 'none', 500);
+                }, 5000);
+            }
+        };
+    </script>
+</body>
+</html>

@@ -37,7 +37,7 @@ const studentSchema = new mongoose.Schema({
         required: true,
         trim: true,
         match: /^[0-9]{10}$/
-    },
+    }, 
     place: {
         type: String,
         required: true,

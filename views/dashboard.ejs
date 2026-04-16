@@ -4,108 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imam Gazzali Academy | Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    
 </head>
 <body>
 
-    <div class="dashboard-container">
+    <!-- Blurred Background Orbs from Design Language PDF -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
 
-        <!-- Top Navigation Bar -->
+    <div class="dashboard-container">
+        
+        <!-- Navigation -->
         <nav class="top-navbar">
             <div class="logo-section">
-                <img src="/images/logo1.png" 
-                     alt="Imam Gazzali Academy Logo" 
-                     class="academy-logo">
+                <img src="/images/logo1.png" alt="Logo" class="academy-logo" onerror="this.src='https://ui-avatars.com/api/?name=IGA&background=4F46E5&color=fff'">
                 <div class="academy-name">
-                    <h1>Imam Gazzali Academy</h1>
-                    <p>Student Management Portal</p>
+                    <h1>Imam Gazzali</h1>
+                    <p>Academy Portal</p>
                 </div>
             </div>
             
             <div class="nav-actions">
-                <a href="/students" class="nav-link">
-                    <span class="icon">👥</span>
-                    Students
+                <a href="/students" class="btn btn-ghost">
+                    <span>👥</span> Students
                 </a>
-                <a href="/students/new" class="btn-primary">
-                    <span class="plus">+</span> Add New Student
+                <a href="/students/new" class="btn btn-primary">
+                    <span>+</span> Add Student
                 </a>
+                
+                <!-- Smooth Logout Button -->
+                <form action="/logout" method="GET" style="display: inline;">
+                    <button type="submit" class="btn btn-logout">
+                        <span>Logout</span>
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                    </button>
+                </form>
             </div>
         </nav>
 
         <!-- Main Content -->
         <main class="main-content">
-            
-            <div class="welcome-section">
-                <h1>Welcome back, Admin! 👋</h1>
-                <p>Good to see you at Imam Gazzali Academy. Here's what's happening today.</p>
+            <div class="welcome-header">
+                <h2>السَّلَامُ عَلَيْكُمْ 👋</h2>
+                <p>Welcome to your central management hub. Monitor student performance, manage enrollments, and ensure academic quality from one smooth interface.</p>
             </div>
 
-            <!-- Quick Stats -->
+            <!-- Dynamic Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon bg-blue">👥</div>
-                    <div class="stat-info">
-                        <h3>Total Students</h3>
-                        <div class="stat-number"><%= totalStudents %></div>
-                    </div>
+                    <span class="stat-label">Total Enrollment</span>
+                    <div class="stat-value"><%= totalStudents %></div>
                 </div>
                 
                 <!-- <div class="stat-card">
-                    <div class="stat-icon bg-green">📅</div>
-                    <div class="stat-info">
-                        <h3>New Admissions</h3>
-                        <div class="stat-number">18</div>
-                        <p class="stat-trend positive">This academic year</p>
-                    </div>
-                </div>
+                    <span class="stat-label">Active Term</span>
+                    <div class="stat-value" style="font-size: 1.8rem; padding-top: 10px;">Spring 2026</div>
+                </div> -->
                 
                 <div class="stat-card">
-                    <div class="stat-icon bg-purple">🏫</div>
-                    <div class="stat-info">
-                        <h3>Active Classes</h3>
-                        <div class="stat-number">14</div>
-                        <p class="stat-trend">Grade 1 – Grade 12</p>
-                    </div>
+                    <span class="stat-label">Portal Status</span>
+                    <div class="stat-value" style="font-size: 1.8rem; color: #10B981; padding-top: 10px;">Secure ●</div>
                 </div>
-            </div> -->
-
-            <!-- Action Cards -->
-            <div class="dashboard-grid">
-                
-                <a href="/students" class="dash-card glass-card">
-                    <div class="card-icon-wrapper bg-indigo">
-                        <span class="card-icon">👥</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>View All Students</h3>
-                        <p>Browse the complete student directory, search, edit and manage records.</p>
-                        <span class="card-cta">Open Directory →</span>
-                    </div>
-                </a>
-
-                <a href="/students/new" class="dash-card glass-card">
-                    <div class="card-icon-wrapper bg-teal">
-                        <span class="card-icon">➕</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Add New Student</h3>
-                        <p>Register a new admission and add student details to the academy database.</p>
-                        <span class="card-cta">Start Admission →</span>
-                    </div>
-                </a>
-
             </div>
 
+            <!-- Action Cards -->
+            <div class="action-grid">
+                <a href="/students" class="action-card">
+                    <div class="icon-circle">📂</div>
+                    <h3>Student Directory</h3>
+                    <p>Review comprehensive details for every student, including attendance, grades, and emergency contacts.</p>
+                    <span class="action-link">Explore Records &rarr;</span>
+                </a>
+
+                <a href="/students/new" class="action-card">
+                    <div class="icon-circle">📝</div>
+                    <h3>New Enrollment</h3>
+                    <p>Initiate the registration process for new candidates with our streamlined data entry system.</p>
+                    <span class="action-link">Start Registration &rarr;</span>
+                </a>
+            </div>
         </main>
 
-        <!-- Footer -->
         <footer class="dash-footer">
-            <p>&copy; 2026 Imam Gazzali Academy • Student Management System</p>
-            <!-- <p class="footer-link">Made with ❤️ for Imam Gazzali Academy</p> -->
+            <p>&copy; 2026 Imam Gazzali Academy • Professional Education Management</p>
         </footer>
-
     </div>
 
 </body>
