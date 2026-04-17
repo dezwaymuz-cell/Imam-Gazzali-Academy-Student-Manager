@@ -5,39 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imam Gazzali Academy | Dashboard</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Blurred Background Orbs from Design Language PDF -->
+    <!-- 2. Visual Elements: Background Depth Orbs -->
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
 
     <div class="dashboard-container">
         
-        <!-- Navigation -->
+        <!-- Navigation Bar -->
         <nav class="top-navbar">
-            <div class="logo-section">
-                <img src="/images/logo1.png" alt="Logo" class="academy-logo" onerror="this.src='https://ui-avatars.com/api/?name=IGA&background=4F46E5&color=fff'">
+            <a href="/" class="logo-section">
+                <img src="/images/logo1.png" alt="Academy Logo" class="academy-logo" onerror="this.src='https://ui-avatars.com/api/?name=IGA&background=4F46E5&color=fff'">
                 <div class="academy-name">
                     <h1>Imam Gazzali</h1>
-                    <p>Academy Portal</p>
+                    <p>Student Portal</p>
                 </div>
-            </div>
+            </a>
             
             <div class="nav-actions">
                 <a href="/students" class="btn btn-ghost">
                     <span>👥</span> Students
                 </a>
                 <a href="/students/new" class="btn btn-primary">
-                    <span>+</span> Add Student
+                    <span>+</span> Add New
                 </a>
                 
-                <!-- Smooth Logout Button -->
-                <form action="/logout" method="GET" style="display: inline;">
-                    <button type="submit" class="btn btn-logout">
+                <!-- 3. Interactions: Smooth Logout Button -->
+                <form action="/logout" method="POST" style="display: contents;">
+                    <button type="submit" class="btn btn-logout" title="Exit Portal">
                         <span>Logout</span>
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
@@ -47,51 +47,51 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
+        <!-- Main Workspace -->
         <main class="main-content">
             <div class="welcome-header">
-                <h2>السَّلَامُ عَلَيْكُمْ 👋</h2>
-                <p>Welcome to your central management hub. Monitor student performance, manage enrollments, and ensure academic quality from one smooth interface.</p>
+                <h2>Assalamu Alaikum, Admin! 👋</h2>
+                <p>Monitor your academy's academic pulse. From individual student tracking to high-level enrollment trends, manage everything with effortless precision.</p>
             </div>
 
-            <!-- Dynamic Stats -->
+            <!-- 4. Fluid Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-label">Total Enrollment</span>
                     <div class="stat-value"><%= totalStudents %></div>
                 </div>
                 
-                <!-- <div class="stat-card">
+                <div class="stat-card">
                     <span class="stat-label">Active Term</span>
-                    <div class="stat-value" style="font-size: 1.8rem; padding-top: 10px;">Spring 2026</div>
-                </div> -->
+                    <div class="stat-value" style="font-size: clamp(1.5rem, 3vw, 2.2rem); margin-top: 10px;">Spring '26</div>
+                </div>
                 
                 <div class="stat-card">
-                    <span class="stat-label">Portal Status</span>
-                    <div class="stat-value" style="font-size: 1.8rem; color: #10B981; padding-top: 10px;">Secure ●</div>
+                    <span class="stat-label">Portal Integrity</span>
+                    <div class="stat-value" style="font-size: clamp(1.5rem, 3vw, 2.2rem); color: #10B981; margin-top: 10px;">Secure ●</div>
                 </div>
             </div>
 
-            <!-- Action Cards -->
+            <!-- Dashboard Action Cards -->
             <div class="action-grid">
                 <a href="/students" class="action-card">
-                    <div class="icon-circle">📂</div>
+                    <div class="icon-box">📂</div>
                     <h3>Student Directory</h3>
-                    <p>Review comprehensive details for every student, including attendance, grades, and emergency contacts.</p>
-                    <span class="action-link">Explore Records &rarr;</span>
+                    <p>Detailed insight into student profiles, academic progress reports, and historical data points for informed decision making.</p>
+                    <span class="action-link">Open Records &rarr;</span>
                 </a>
 
                 <a href="/students/new" class="action-card">
-                    <div class="icon-circle">📝</div>
-                    <h3>New Enrollment</h3>
-                    <p>Initiate the registration process for new candidates with our streamlined data entry system.</p>
-                    <span class="action-link">Start Registration &rarr;</span>
+                    <div class="icon-box">📝</div>
+                    <h3>Enrollment Entry</h3>
+                    <p>Add new students to the Academy's official roster using our optimized, validation-ready registration interface.</p>
+                    <span class="action-link">Register Student &rarr;</span>
                 </a>
             </div>
         </main>
 
         <footer class="dash-footer">
-            <p>&copy; 2026 Imam Gazzali Academy • Professional Education Management</p>
+            <p>&copy; 2026 Imam Gazzali Academy • Professional Management Suite</p>
         </footer>
     </div>
 

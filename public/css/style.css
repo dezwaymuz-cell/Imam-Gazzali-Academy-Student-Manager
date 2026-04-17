@@ -1,24 +1,28 @@
-
-        /* CSS Variables based on Academy Smooth Design Language PDF */
+  /* ACADEMY SMOOTH DESIGN LANGUAGE IMPLEMENTATION
+           Reference: gazzali-design.pdf
+        */
         :root {
+            /* 1. Color Palette */
             --primary: #4F46E5;
             --primary-hover: #4338CA;
             --surface-bg: #F8FAFC;
             --glass-bg: rgba(255, 255, 255, 0.8);
             --text-heading: #1E293B;
-            --text-sub: #647488;
+            --text-sub: #64748B;
             --error-bg: #FEF2F2;
             --error-text: #DC2626;
             
-            /* Visual Elements */
+            /* 2. Visual Elements */
             --soft-shadow: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
-            --main-radius: 2rem; /* 32px as per PDF */
-            --component-radius: 0.75rem; /* 12px as per PDF */
+            --main-radius: 2rem; /* 32px */
+            --component-radius: 0.75rem; /* 12px */
             
-            /* Motion */
+            /* 3. Motion & Smoothness */
             --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-speed: 0.5s;
         }
 
+        /* Basic Reset & Fluid Foundations */
         * {
             margin: 0;
             padding: 0;
@@ -33,74 +37,86 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            /* 4. Ultra-Responsive Padding */
+            padding: clamp(1rem, 3vw, 2rem);
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Background Orbs as specified in PDF */
+        /* 2. Depth Orbs */
         .bg-orb {
             position: fixed;
-            width: 600px;
-            height: 600px;
+            width: 45vw;
+            height: 45vw;
             border-radius: 50%;
             filter: blur(100px);
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.5;
         }
-        .orb-1 { top: -150px; right: -150px; background: #E0E7FF; } /* Indigo-100 */
-        .orb-2 { bottom: -150px; left: -150px; background: #EFF6FF; } /* Blue-50 */
+        .orb-1 { top: -10vh; right: -10vw; background: #E0E7FF; } /* Indigo-100 */
+        .orb-2 { bottom: -10vh; left: -10vw; background: #EFF6FF; } /* Blue-50 */
 
-        /* Staggered Fade-in Animation */
-        @keyframes entrance {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* 3. Entrance Animation */
+        @keyframes staggeredEntrance {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         .dashboard-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1280px;
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-radius: var(--main-radius);
             box-shadow: var(--soft-shadow);
             border: 1px solid rgba(255, 255, 255, 0.6);
             overflow: hidden;
-            animation: entrance 0.8s var(--ease-smooth) forwards;
+            display: flex;
+            flex-direction: column;
+            animation: staggeredEntrance 1s var(--ease-smooth) forwards;
         }
 
-        /* Header / Nav */
+        /* Navigation Header */
         .top-navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 48px;
-            background: rgba(255, 255, 255, 0.3);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            padding: clamp(1.5rem, 4vw, 2.5rem);
+            background: rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.4);
         }
 
         .logo-section {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 1.25rem;
+            text-decoration: none;
+            color: inherit;
         }
 
         .academy-logo {
-            height: 48px;
+            height: clamp(40px, 6vh, 56px);
             width: auto;
             border-radius: 12px;
-            transition: transform 0.3s var(--ease-smooth);
+            transition: transform 0.4s var(--ease-smooth);
         }
 
         .logo-section:hover .academy-logo {
-            transform: rotate(-5deg) scale(1.05);
+            transform: scale(1.05) rotate(-3deg);
         }
 
         .academy-name h1 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.2;
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
         }
 
         .academy-name p {
@@ -108,32 +124,36 @@
             color: var(--text-sub);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            margin-top: 4px;
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 1rem;
         }
 
-        /* Buttons & Interactions */
+        /* 4. Touch Targets & Interaction Areas */
         .btn {
-            padding: 10px 20px;
+            min-height: 44px; /* PDF Standard */
+            padding: 0.75rem 1.5rem;
             border-radius: var(--component-radius);
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
             text-decoration: none;
-            transition: all 0.4s var(--ease-smooth);
+            transition: all var(--transition-speed) var(--ease-smooth);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 0.5rem;
             cursor: pointer;
             border: none;
+            white-space: nowrap;
         }
 
         .btn:active {
-            transform: scale(0.96); /* Slightly more tactile scale for click */
+            transform: scale(0.98); /* PDF Spec */
         }
 
         .btn-ghost {
@@ -149,20 +169,19 @@
         .btn-primary {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .btn-primary:hover {
             background: var(--primary-hover);
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
             transform: translateY(-2px);
         }
 
-        /* Logout Button - Very Smooth Red Theme */
+        /* Logout Button - Enhanced Smoothness */
         .btn-logout {
             color: var(--text-sub);
-            background: rgba(220, 38, 38, 0.03);
-            margin-left: 8px;
+            background: rgba(220, 38, 38, 0.04);
         }
 
         .btn-logout:hover {
@@ -173,59 +192,58 @@
         .btn-logout svg {
             width: 18px;
             height: 18px;
-            transition: transform 0.3s var(--ease-smooth);
+            transition: transform 0.4s var(--ease-smooth);
         }
 
         .btn-logout:hover svg {
-            transform: translateX(3px);
+            transform: translateX(4px);
         }
 
-        /* Main Content */
+        /* Main Body Content */
         .main-content {
-            padding: 56px 48px;
+            padding: clamp(2rem, 6vw, 4rem);
+            flex-grow: 1;
         }
 
         .welcome-header {
-            margin-bottom: 48px;
-            animation: entrance 0.8s var(--ease-smooth) 0.1s forwards;
-            opacity: 0;
+            margin-bottom: clamp(2.5rem, 5vh, 4rem);
+            animation: staggeredEntrance 1s var(--ease-smooth) 0.1s both;
         }
 
         .welcome-header h2 {
-            font-size: 2.5rem;
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
             font-weight: 800;
-            margin-bottom: 12px;
             letter-spacing: -0.04em;
+            margin-bottom: 0.75rem;
         }
 
         .welcome-header p {
             color: var(--text-sub);
-            font-size: 1.15rem;
-            max-width: 600px;
+            font-size: clamp(1rem, 1.5vw, 1.15rem);
+            max-width: 650px;
             line-height: 1.6;
         }
 
-        /* Stats Grid */
+        /* 4. Fluid Grid Layouts */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 56px;
-            animation: entrance 0.8s var(--ease-smooth) 0.2s forwards;
-            opacity: 0;
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+            animation: staggeredEntrance 1s var(--ease-smooth) 0.2s both;
         }
 
         .stat-card {
             background: white;
-            padding: 32px;
+            padding: 2.5rem;
             border-radius: var(--component-radius);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(241, 245, 249, 0.8);
-            transition: all 0.4s var(--ease-smooth);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(241, 245, 249, 1);
+            transition: all var(--transition-speed) var(--ease-smooth);
         }
 
         .stat-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px);
             border-color: var(--primary);
             box-shadow: var(--soft-shadow);
         }
@@ -235,100 +253,118 @@
             font-weight: 700;
             color: var(--text-sub);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 16px;
+            letter-spacing: 0.12em;
+            margin-bottom: 1.25rem;
             display: block;
         }
 
         .stat-value {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 800;
             color: var(--text-heading);
-            letter-spacing: -0.02em;
+            letter-spacing: -0.04em;
+            line-height: 1;
         }
 
-        /* Dashboard Grid */
         .action-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 24px;
-            animation: entrance 0.8s var(--ease-smooth) 0.3s forwards;
-            opacity: 0;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.5rem;
+            animation: staggeredEntrance 1s var(--ease-smooth) 0.3s both;
         }
 
         .action-card {
             background: white;
-            padding: 48px;
+            padding: clamp(2.5rem, 5vw, 3.5rem);
             border-radius: var(--component-radius);
             text-decoration: none;
             color: inherit;
-            border: 1px solid rgba(241, 245, 249, 0.8);
-            transition: all 0.5s var(--ease-smooth);
+            border: 1px solid rgba(241, 245, 249, 1);
+            transition: all var(--transition-speed) var(--ease-smooth);
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .action-card:hover {
             border-color: var(--primary);
             box-shadow: var(--soft-shadow);
-            transform: translateY(-6px);
+            transform: translateY(-8px);
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            background: var(--surface-bg);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            font-size: 1.75rem;
+            transition: all 0.4s var(--ease-smooth);
+        }
+
+        .action-card:hover .icon-box {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
         }
 
         .action-card h3 {
             font-size: 1.5rem;
-            font-weight: 750;
-            margin-bottom: 16px;
+            font-weight: 800;
+            margin-bottom: 1rem;
             letter-spacing: -0.02em;
         }
 
         .action-card p {
             color: var(--text-sub);
             line-height: 1.7;
-            margin-bottom: 32px;
+            margin-bottom: 2.5rem;
             font-size: 1.05rem;
+            flex-grow: 1;
         }
 
         .action-link {
             color: var(--primary);
-            font-weight: 700;
+            font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1rem;
+            gap: 0.5rem;
             transition: gap 0.3s var(--ease-smooth);
         }
 
         .action-card:hover .action-link {
-            gap: 12px;
+            gap: 0.8rem;
         }
 
         /* Footer */
         .dash-footer {
-            padding: 40px;
+            padding: 2.5rem;
             text-align: center;
             border-top: 1px solid rgba(226, 232, 240, 0.4);
             color: var(--text-sub);
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        /* Icons */
-        .icon-circle {
-            width: 48px;
-            height: 48px;
-            background: var(--surface-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            font-size: 1.5rem;
-        }
-
-        /* Responsive */
+        /* 4. Mobile Adaptability */
         @media (max-width: 768px) {
-            .top-navbar { padding: 24px; flex-direction: column; gap: 24px; }
-            .main-content { padding: 40px 24px; }
-            .welcome-header h2 { font-size: 2rem; }
-            .nav-actions { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .top-navbar { 
+                flex-direction: column; 
+                gap: 2rem; 
+                padding: 2rem;
+            }
+            .nav-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .btn {
+                flex-grow: 1;
+            }
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
         }
-   
