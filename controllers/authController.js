@@ -1,10 +1,14 @@
 
 
 const loginCredintials = {
-  userName : "Gazzali",
-  password : 313
+  userName : "W3Tstru",
+  password : "WE4Tsur" 
 }
 
+// const loginCredintials = {
+//   userName : "Gazzali",
+//   password : 313
+// }
 
 
 exports.getLoginPage = (req, res) => {

@@ -143,7 +143,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     padding: 4px 0;
 }
 
@@ -172,6 +172,40 @@ body {
     color: white;
     border-color: var(--primary);
     box-shadow: 0 6px 14px -4px rgba(99, 102, 241, 0.4);
+}
+
+/* NEW: Class Filter - Simple, clean & modern dropdown */
+.class-filter {
+    margin-bottom: 28px;
+}
+
+.filter-select {
+    width: 100%;
+    max-width: 380px;
+    padding: 13px 20px;
+    padding-right: 48px;
+    border-radius: 9999px;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E") no-repeat right 20px center;
+    background-size: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: var(--transition);
+    appearance: none;
+    box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.filter-select:focus {
+    border-color: var(--primary);
+    background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.filter-select:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
 }
 
 /* Student Grid */
@@ -601,7 +635,7 @@ textarea {
     transform: translateY(0);
 }
 
-/* Responsive */
+/* Responsive - Everything remains perfectly responsive */
 @media (max-width: 600px) {
     .student-grid {
         grid-template-columns: 1fr;
@@ -636,6 +670,11 @@ textarea {
     .filter-pill {
         padding: 9px 20px;
         font-size: 0.9rem;
+    }
+
+    /* Class filter stays clean on mobile */
+    .filter-select {
+        max-width: 100%;
     }
 }
 

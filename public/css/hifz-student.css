@@ -1,0 +1,298 @@
+/* ACADEMY SMOOTH DESIGN SYSTEM */
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --surface-bg: #F8FAFC;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --text-heading: #1E293B;
+            --text-sub: #64748B;
+            --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --soft-shadow: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
+            --main-radius: 2rem;
+            --component-radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--surface-bg);
+            color: var(--text-heading);
+            min-height: 100vh;
+            padding: clamp(1rem, 5vw, 3rem);
+            line-height: 1.6;
+        }
+
+        /* Decorative Background Orbs */
+        .bg-orb {
+            position: fixed;
+            width: 45vw;
+            height: 45vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .orb-1 { top: -10%; right: -5%; background: #E0E7FF; }
+        .orb-2 { bottom: -10%; left: -5%; background: #EFF6FF; }
+
+        @keyframes entrance {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: entrance 0.8s var(--ease-smooth) forwards;
+        }
+
+        /* Header Styles */
+        header {
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: color 0.3s var(--ease-smooth);
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover { color: var(--primary); }
+
+        .student-title-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-name {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .badge {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Card Component */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--main-radius);
+            box-shadow: var(--soft-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .grid-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-item span {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .highlight-juz {
+            font-size: 2rem !important;
+            color: var(--primary);
+            font-weight: 800 !important;
+        }
+
+        /* Update Form Inline */
+        .inline-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            max-width: 300px;
+        }
+
+        .input-smooth {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border-radius: var(--component-radius);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .input-smooth:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--component-radius);
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-smooth);
+            font-family: inherit;
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Progress Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .year-group {
+            margin-bottom: 3rem;
+        }
+
+        .year-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .year-title::after {
+            content: "";
+            height: 2px;
+            flex-grow: 1;
+            background: rgba(226, 232, 240, 0.5);
+        }
+
+        .month-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .month-card {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--component-radius);
+            display: grid;
+            grid-template-columns: 150px 1fr 1fr 1fr;
+            align-items: center;
+            border: 1px solid rgba(241, 245, 249, 1);
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .month-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: var(--soft-shadow);
+        }
+
+        .month-name {
+            font-weight: 800;
+            color: var(--text-heading);
+            font-size: 1.1rem;
+        }
+
+        .progress-stat label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            display: block;
+        }
+
+        .progress-stat span {
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal.active { display: flex; animation: entrance 0.5s var(--ease-smooth); }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--main-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .month-card {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+            header { flex-direction: column; }
+        }

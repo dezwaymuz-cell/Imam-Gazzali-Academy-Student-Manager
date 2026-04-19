@@ -19,7 +19,7 @@ const studentSchema = new mongoose.Schema({
     class: {
         type: String,
         required: true,
-        enum: ['5','6','7','8','9','10','Plus One','Plus Two','Degree']
+        enum: ['5', '6', '7', '8', '9', '10', 'Plus One', 'Plus Two', 'Degree']
     },
     course: {
         type: String,
@@ -37,7 +37,7 @@ const studentSchema = new mongoose.Schema({
         required: true,
         trim: true,
         match: /^[0-9]{10}$/
-    }, 
+    },
     place: {
         type: String,
         required: true,
@@ -56,7 +56,19 @@ const studentSchema = new mongoose.Schema({
     admissionDate: {
         type: Date,
         default: Date.now
-    }
+    },
+    currentJuz:{
+        type:Number
+    },
+    progress: [
+        {
+            year: Number,
+            month: String,
+            padam: String,
+            sabkJuz: String,
+            murajah: String
+        }
+    ],
 }, { timestamps: true });
 
 const Std = mongoose.model('Student', studentSchema);

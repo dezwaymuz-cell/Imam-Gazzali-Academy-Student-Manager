@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= student.name %> | Hifz Portal</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/hifz-student.css">
+  
+</head>
+<body>
+
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div>
+                <a href="/hifz" class="back-btn">← Back to Directory</a>
+                <div class="student-title-group">
+                    <h1 class="student-name"><%= student.name %></h1>
+                    <span class="badge">Class <%= student.class %></span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="toggleModal(true)">+ Add Progress</button>
+        </header>
+
+        <!-- Basic Info Card -->
+        <div class="glass-card">
+            <div class="grid-info">
+                <div class="info-item">
+                    <label>Parent Name</label>
+                    <span><%= student.parentName %></span>
+                </div>
+                <div class="info-item">
+                    <label>Contact Phone</label>
+                    <span><%= student.phone %></span>
+                </div>
+                <div class="info-item">
+                    <label>Current Status</label>
+                    <span class="highlight-juz"><%= student.currentJuz || 'N/A' %> <small style="font-size: 0.8rem; font-weight: 500;">Juz</small></span>
+                    
+                    <form action="/hifz/student/<%= student._id %>/update-juz" method="POST" class="inline-form">
+                        <input type="text" name="currentJuz" class="input-smooth" placeholder="Update Juz...">
+                        <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Set</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress History -->
+        <section>
+            <div class="section-header">
+                <h2 style="font-weight: 800; letter-spacing: -0.02em;">Academic Progress</h2>
+            </div>
+
+            <% if (student.progress && student.progress.length > 0) { %>
+                <% 
+                   // Group progress by year
+                   const grouped = {};
+                   student.progress.forEach(p => {
+                       if(!grouped[p.year]) grouped[p.year] = [];
+                       grouped[p.year].push(p);
+                   });
+                   const years = Object.keys(grouped).sort((a,b) => b - a);
+                %>
+
+                <% years.forEach(year => { %>
+                    <div class="year-group">
+                        <div class="year-title"><%= year %></div>
+                        <div class="month-list">
+                            <% grouped[year].forEach(item => { %>
+                                <div class="month-card">
+                                    <div class="month-name"><%= item.month %></div>
+                                    <div class="progress-stat">
+                                        <label>PADAM</label>
+                                        <span><%= item.padam %></span>
+                                    </div>
+                                    <div class="progress-stat">
+                                        <label>SABK JUZ</label>
+                                        <span><%= item.sabkJuz %></span>
+                                    </div>
+                                    <div class="progress-stat">
+                                        <label>MURAJAH</label>
+                                        <span><%= item.murajah %></span>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                <% }) %>
+
+            <% } else { %>
+                <div class="glass-card" style="text-align: center; padding: 4rem;">
+                    <p style="color: var(--text-sub); font-weight: 600;">No progress records found for this student.</p>
+                </div>
+            <% } %>
+        </section>
+    </div>
+
+    <!-- Add Progress Modal -->
+    <div class="modal" id="progressModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1.5rem; font-weight: 800;">Add Progress</h2>
+            <form action="/hifz/student/<%= student._id %>/add-progress" method="POST">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="number" name="year" class="input-smooth" value="<%= new Date().getFullYear() %>" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label>Month</label>
+                        <select name="month" class="input-smooth" required>
+                            <% ['January','February','March','April','May','June','July','August','September','October','November','December'].forEach(m => { %>
+                                <option value="<%= m %>" <%= new Date().toLocaleString('default', { month: 'long' }) === m ? 'selected' : '' %>><%= m %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>PADAM (Daily Lesson)</label>
+                    <input type="text" name="padam" class="input-smooth" placeholder="e.g. 5 Pages" required>
+                </div>
+                <div class="form-group">
+                    <label>SABK JUZ</label>
+                    <input type="text" name="sabkJuz" class="input-smooth" placeholder="e.g. 1.5 Juz" required>
+                </div>
+                <div class="form-group">
+                    <label>MURAJAH (Revision)</label>
+                    <input type="text" name="murajah" class="input-smooth" placeholder="e.g. 10 Juz" required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn" onclick="toggleModal(false)" style="background: #F1F5F9; flex: 1;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">Save Progress</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(show) {
+            const modal = document.getElementById('progressModal');
+            if(show) {
+                modal.classList.add('active');
+            } else {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('progressModal');
+            if (event.target == modal) {
+                toggleModal(false);
+            }
+        }
+    </script>
+</body>
+</html>

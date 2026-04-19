@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hifz Students | Imam Gazzali Academy</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/hifz.css">
+  
+</head>
+<body>
+
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="page-container">
+        <header>
+            <a href="/dashboard" class="back-link">← Dashboard</a>
+            <h1>Hifz Directory</h1>
+            <p class="subtitle">Search and manage student profiles</p>
+        </header>
+
+        <div class="controls">
+            <!-- Search Input -->
+            <div class="search-wrapper">
+                <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by student name...">
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-group" id="filterGroup">
+                <button class="filter-btn active" data-class="all">All Classes</button>
+                <button class="filter-btn" data-class="5">Class 5</button>
+                <button class="filter-btn" data-class="6">Class 6</button>
+                <button class="filter-btn" data-class="7">Class 7</button>
+                <button class="filter-btn" data-class="8">Class 8</button>
+                <button class="filter-btn" data-class="9">Class 9</button>
+                <button class="filter-btn" data-class="10">Class 10</button>
+            </div>
+        </div>
+
+        <div class="student-list" id="studentList">
+            <% if (st && st.length > 0) { %>
+                <% st.forEach((student, index) => { %>
+                    <a href="/hifz/student/<%= student._id %>" 
+                       class="student-item" 
+                       data-name="<%= student.name.toLowerCase() %>" 
+                       data-class="<%= student.class %>"
+                       style="animation-delay: <%= index * 0.05 %>s">
+                        <div class="student-info">
+                            <h3><%= student.name %></h3>
+                        </div>
+                        <span class="class-badge">Class <%= student.class %></span>
+                    </a>
+                <% }) %>
+            <% } else { %>
+                <div class="no-results" style="display: block;">
+                    <h2>No students found</h2>
+                    <p class="subtitle">Try adjusting your filters or search term.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Empty state for JS filtering -->
+        <div id="jsNoResults" class="no-results">
+            <h2>No matching students found</h2>
+            <p class="subtitle">Try a different name or class filter.</p>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const studentItems = document.querySelectorAll('.student-item');
+        const jsNoResults = document.getElementById('jsNoResults');
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function filterList() {
+            let visibleCount = 0;
+
+            studentItems.forEach(item => {
+                const name = item.getAttribute('data-name');
+                const studentClass = item.getAttribute('data-class');
+
+                const matchesSearch = name.includes(currentSearch.toLowerCase());
+                const matchesClass = currentFilter === 'all' || studentClass === currentFilter;
+
+                if (matchesSearch && matchesClass) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            jsNoResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Search Listener
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            filterList();
+        });
+
+        // Filter Button Listener
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // UI Toggle
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Logic
+                currentFilter = btn.getAttribute('data-class');
+                filterList();
+            });
+        });
+    </script>
+</body>
+</html>

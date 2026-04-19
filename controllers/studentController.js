@@ -1,64 +1,87 @@
-const studentShm = require('../models/Student Schema')
+const studentShm = require('../models/Student Schema');
 
+// ✅ CREATE STUDENT
+exports.saveStudent = async (req, res) => {
+  try {
+    console.log(req.body);
 
-async function saveStudent(getAddStudentPage) {
-  const std = new studentShm(getAddStudentPage);
-  try{
-    postAddStudent = await std.save();
-console.log("Succeesss"+postAddStudent);
+    const std = new studentShm(req.body);
+    await std.save();
 
+    // For your AJAX frontend (recommended)
+    res.json({
+      success: true,
+      message: "Student registered successfully"
+    });
+
+  } catch (err) {
+    console.log(err);
+
+    res.status(400).json({
+      success: false,
+      message: err.message || "Failed to add student"
+    });
   }
-  catch(err){
-console.log(err);
-
-  }
-}
+};
 
 
-async function getStudents() {
-  try{
+// ✅ GET ALL STUDENTS
+exports.getStudents = async (req, res) => {
+  try {
     const students = await studentShm.find();
-    console.log('All users:', students);
-    return students;
-  }
-  catch(err){
-    console.log(err);
-    
-  }
-}
 
-async function deleteStudent(stdId){
-  try{
-    await studentShm.deleteOne({_id:stdId});
-    return true;
-  }
-  catch(err){
-    console.log(err);
-    return false;
-  }
-}
+    console.log('All users:', students.length);
 
-async function updateStudent(stdId,updtData){
-  try{
-    await studentShm.updateOne({_id:stdId},updtData);
-    return true;
-  }
-  catch(err){
-    console.log(err);
-    return false;
-  }
-}
+    res.render('students', { st: students });
 
-async function getStudentsCount() {
-  try{
-    const studentsCount = await studentShm.countDocuments();
-    console.log('All users:', studentsCount);
-    return studentsCount;
-  }
-  catch(err){
+  } catch (err) {
     console.log(err);
-    
+    res.status(500).send("Error loading students");
   }
-}
+};
 
-module.exports = {saveStudent,getStudents,deleteStudent,updateStudent,getStudentsCount};
+
+// ✅ DELETE STUDENT
+exports.deleteStudent = async (req, res) => {
+  try {
+    await studentShm.deleteOne({ _id: req.params.id });
+
+    console.log("Delete Successfully");
+
+    res.redirect('/students');
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Delete failed");
+  }
+};
+
+
+// ✅ UPDATE STUDENT
+exports.updateStudent = async (req, res) => {
+  try {
+    const { id, ...updateData } = req.body;
+
+    await studentShm.updateOne({ _id: id }, updateData);
+
+    console.log("Update Successfully");
+
+    res.redirect('/students');
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Update failed");
+  }
+};
+
+
+// ✅ COUNT (for dashboard)
+exports.getStudentsCount = async () => {
+  try {
+    const count = await studentShm.countDocuments();
+    return count;
+  } catch (err) {
+    console.log(err);
+    return 0;
+  }
+};

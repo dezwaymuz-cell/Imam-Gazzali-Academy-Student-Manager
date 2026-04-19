@@ -16,7 +16,6 @@
     </div>
 
     <div class="container-wide">
-
         <!-- Top Navigation -->
         <div class="top-nav">
             <a href="/" class="btn-back">
@@ -53,6 +52,22 @@
             <button class="filter-pill" data-filter="hifz">Hifz</button>
             <button class="filter-pill" data-filter="junior shareeath">Junior Shareeath</button>
             <button class="filter-pill" data-filter="dars">Dars</button>
+        </div>
+
+        <!-- NEW: Class Filter (Simple & Clean) - Added as requested -->
+        <div class="class-filter">
+            <select id="classFilter" class="filter-select">
+                <option value="all">All Classes</option>
+                <option value="5">Class 5</option>
+                <option value="6">Class 6</option>
+                <option value="7">Class 7</option>
+                <option value="8">Class 8</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="plus one">Plus One</option>
+                <option value="plus two">Plus Two</option>
+                <option value="degree">Degree</option>
+            </select>
         </div>
 
         <!-- Student Grid -->
@@ -269,11 +284,15 @@
         // Total students count (from EJS)
         const totalStudents = <%= st.length %>;
 
-        // Combined search + category filter
+        // Combined search + category + class filter
         function applyFilters() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
             const activePill = document.querySelector('.filter-pill.active');
             const filterCategory = activePill ? activePill.dataset.filter : 'all';
+            
+            // NEW: Class filter value
+            const classFilterEl = document.getElementById('classFilter');
+            const selectedClassFilter = classFilterEl ? classFilterEl.value : 'all';
 
             const cards = document.querySelectorAll('.student-card');
             let visibleCount = 0;
@@ -299,7 +318,10 @@
                 // Category match
                 const matchesCategory = filterCategory === 'all' || category === filterCategory;
 
-                if (matchesSearch && matchesCategory) {
+                // NEW: Class match
+                const matchesClass = selectedClassFilter === 'all' || cls === selectedClassFilter;
+
+                if (matchesSearch && matchesCategory && matchesClass) {
                     card.style.display = 'flex';
                     visibleCount++;
                 } else {
@@ -328,16 +350,20 @@
             }
         }
 
-        // Reset both search and category filter
+        // Reset both search, category and class filter
         function resetFilters() {
             // Clear search
             document.getElementById('searchInput').value = '';
             
-            // Reset pills to "All"
+            // Reset category pills to "All"
             document.querySelectorAll('.filter-pill').forEach(pill => {
                 pill.classList.remove('active');
                 if (pill.dataset.filter === 'all') pill.classList.add('active');
             });
+
+            // NEW: Reset class filter
+            const classFilterEl = document.getElementById('classFilter');
+            if (classFilterEl) classFilterEl.value = 'all';
 
             // Re-apply filters
             applyFilters();
@@ -437,6 +463,12 @@
                 });
             });
 
+            // NEW: Class filter listener
+            const classFilter = document.getElementById('classFilter');
+            if (classFilter) {
+                classFilter.addEventListener('change', applyFilters);
+            }
+
             // Initialize guardian phone checkbox in edit modal
             initGuardianPhoneEdit();
 
@@ -450,7 +482,7 @@
                 }
             });
 
-            // Initial filter run (in case of any pre-filter needs)
+            // Initial filter run
             applyFilters();
         };
     </script>

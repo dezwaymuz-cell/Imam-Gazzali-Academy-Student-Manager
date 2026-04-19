@@ -7,6 +7,7 @@ const app = express();
 
 const studentRouter = require('./routes/studentRoutes');
 const authRouter = require('./routes/authRoutes');
+const hifzRouter = require('./routes/hifzRoutes')
 const {getStudentsCount} = require('./controllers/studentController')
 const { isLoggedIn } = require('./middlewares/authMiddleware');
 
@@ -48,6 +49,7 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 
 app.use('/', authRouter); 
 app.use('/students', studentRouter);
+app.use('/hifz', hifzRouter)
 
 const PORT = process.env.PORT || 3000;
 

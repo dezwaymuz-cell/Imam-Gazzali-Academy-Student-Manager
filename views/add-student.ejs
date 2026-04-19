@@ -19,8 +19,15 @@
                 <p>Enter details to register a new student in the database.</p>
             </header>
 
+            <!-- NEW: Ultra-smooth Notification -->
+            <div id="notification" class="notification">
+                <div class="notification-text"></div>
+                <button class="close-btn" onclick="hideNotification()">✕</button>
+            </div>
+
             <form action="/students/add" method="POST" class="student-form" id="studentForm">
 
+                <!-- Your all existing form fields (unchanged) -->
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" name="name" placeholder="e.g. Ahmed Mohammed" required>
@@ -80,7 +87,6 @@
                     </div>
                 </div>
 
-                <!-- NEW: Guardian Phone Number with "Same as Phone Number" checkbox -->
                 <div class="form-group">
                     <label>Guardian's Phone Number</label>
                     <div class="input-with-checkbox">
@@ -108,18 +114,20 @@
                     <textarea name="address" placeholder="House No, Street, Post Office, Pincode" rows="3" required></textarea>
                 </div>
 
-                <button type="submit" class="btn-submit">Confirm Registration</button>
+                <button type="submit" class="btn-submit" id="submitBtn">Confirm Registration</button>
             </form>
         </div>
     </div>
 
     <script>
+        // ==================== Your existing scripts (unchanged) ====================
         const classSelect = document.getElementById('classSelect');
         const courseGroup = document.getElementById('courseGroup');
         const courseSelect = document.getElementById('courseSelect');
         const studentForm = document.getElementById('studentForm');
+        const submitBtn = document.getElementById('submitBtn');
 
-        // Show/Hide Course field
+        // Show/Hide Course
         classSelect.addEventListener('change', function() {
             if (this.value === 'Plus One' || this.value === 'Plus Two') {
                 courseGroup.style.display = 'block';
@@ -127,52 +135,101 @@
             } else {
                 courseGroup.style.display = 'none';
                 courseSelect.required = false;
-                courseSelect.value = '';           // Clear value
+                courseSelect.value = '';
             }
         });
 
-        // ✅ IMPORTANT: Remove course field from form submission when not needed
-        studentForm.addEventListener('submit', function(e) {
-            const selectedClass = classSelect.value;
-            
-            // If class is not Plus One or Plus Two, remove the course field completely
-            if (selectedClass !== 'Plus One' && selectedClass !== 'Plus Two') {
-                courseSelect.removeAttribute('name');   // This prevents it from being sent
-            }
-        });
-
-        // ====================== NEW: Guardian Phone Auto-Fill Feature ======================
+        // Guardian Phone Auto-fill
         const phoneInput = document.getElementById('phoneInput');
         const guardianPhoneInput = document.getElementById('guardianPhoneInput');
         const samePhoneCheckbox = document.getElementById('samePhoneCheckbox');
 
-        // Function to copy phone value
         function copyPhoneToGuardian() {
             if (samePhoneCheckbox.checked && phoneInput.value.trim() !== '') {
                 guardianPhoneInput.value = phoneInput.value;
             }
         }
 
-        // Checkbox click → copy immediately
-        samePhoneCheckbox.addEventListener('change', function() {
-            copyPhoneToGuardian();
+        samePhoneCheckbox.addEventListener('change', copyPhoneToGuardian);
+        phoneInput.addEventListener('input', () => { if (samePhoneCheckbox.checked) copyPhoneToGuardian(); });
+        phoneInput.addEventListener('blur', () => {
+            if (samePhoneCheckbox.checked && phoneInput.value.trim() === '') guardianPhoneInput.value = '';
         });
 
-        // If user types in main Phone Number while checkbox is checked → live update
-        phoneInput.addEventListener('input', function() {
-            if (samePhoneCheckbox.checked) {
-                copyPhoneToGuardian();
-            }
-        });
+        // ==================== NEW: Ultra-smooth Notification + AJAX (FIXED) ====================
+        let notificationTimeout = null;
 
-        // Optional: If user clears the main phone, also clear guardian when checked
-        phoneInput.addEventListener('blur', function() {
-            if (samePhoneCheckbox.checked && phoneInput.value.trim() === '') {
-                guardianPhoneInput.value = '';
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const textEl = notification.querySelector('.notification-text');
+
+            if (notificationTimeout) clearTimeout(notificationTimeout);
+
+            textEl.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            notificationTimeout = setTimeout(hideNotification, 5000);
+        }
+
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (!notification.classList.contains('show')) notification.className = 'notification';
+            }, 420);
+        }
+
+        // Fixed AJAX submission (now sends data exactly like normal form)
+        studentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!studentForm.checkValidity()) {
+                studentForm.reportValidity();
+                return;
+            }
+
+            // Handle course field (same logic as before)
+            const selectedClass = classSelect.value;
+            if (selectedClass === 'Plus One' || selectedClass === 'Plus Two') {
+                courseSelect.setAttribute('name', 'course');
+            } else {
+                courseSelect.removeAttribute('name');
+            }
+
+            // Button loading state
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Registering Student...';
+
+            const urlEncoded = new URLSearchParams(new FormData(studentForm));
+
+            try {
+                const response = await fetch(studentForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: urlEncoded
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showNotification(result.message || "Student registered successfully", 'success');
+                    studentForm.reset();
+                    courseGroup.style.display = 'none';
+                    courseSelect.required = false;
+                    samePhoneCheckbox.checked = false;
+                } else {
+                    showNotification(result.message || "Failed to add student", 'error');
+                }
+            } catch (err) {
+                showNotification("Network error. Please check your connection.", 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
         });
-        // ================================================================================
     </script>
-
 </body>
 </html>

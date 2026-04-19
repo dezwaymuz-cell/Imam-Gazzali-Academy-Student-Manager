@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imam Gazzali Academy | Dashboard</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="stylesheet" href="/css/style.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- 2. Visual Elements: Background Depth Orbs -->
+    <!-- Background Orbs -->
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
 
@@ -35,7 +33,6 @@
                     <span>+</span> Add New
                 </a>
                 
-                <!-- 3. Interactions: Smooth Logout Button -->
                 <form action="/logout" method="GET" style="display: contents;">
                     <button type="submit" class="btn btn-logout" title="Exit Portal">
                         <span>Logout</span>
@@ -54,7 +51,7 @@
                 <p>Monitor your academy's academic pulse. From individual student tracking to high-level enrollment trends, manage everything with effortless precision.</p>
             </div>
 
-            <!-- 4. Fluid Stats Grid -->
+            <!-- Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-label">Total Enrollment</span>
@@ -74,6 +71,7 @@
 
             <!-- Dashboard Action Cards -->
             <div class="action-grid">
+                <!-- Student Directory -->
                 <a href="/students" class="action-card">
                     <div class="icon-box">📂</div>
                     <h3>Student Directory</h3>
@@ -81,12 +79,36 @@
                     <span class="action-link">Open Records &rarr;</span>
                 </a>
 
+                <!-- Enrollment Entry -->
                 <a href="/students/new" class="action-card">
                     <div class="icon-box">📝</div>
                     <h3>Enrollment Entry</h3>
                     <p>Add new students to the Academy's official roster using our optimized, validation-ready registration interface.</p>
                     <span class="action-link">Register Student &rarr;</span>
                 </a>
+
+                <!-- ==================== HIFZ → COMING SOON ==================== -->
+                <!-- You can easily change text, icon or modal content below -->
+                <div class="action-card coming-soon-card" onclick="showComingSoonModal()">
+                    <div class="icon-box">📖</div>
+                    <h3>HIFZ</h3>
+                    
+                    <!-- Coming Soon Badge -->
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    
+                    <p>Dedicated tracking and management system for Hifz students. Monitor memorization progress, daily lessons (Padam), Sabk Juz, and Murajah with structured records.</p>
+                    <span class="action-link coming-soon-link">Coming Soon &rarr;</span>
+                </div>
+
+
+                
+                <!-- ============================================================ -->
+                 <!-- <a href="/hifz" class="action-card">
+                    <div class="icon-box">📖</div>
+                    <h3>HIFZ</h3>
+                    <p>Dedicated tracking and management system for Hifz students. Monitor memorization progress, daily lessons (Padam), Sabk Juz, and Murajah with structured records.</p>
+                    <span class="action-link">View Hifz Students &rarr;</span>
+                </a>     -->
             </div>
         </main>
 
@@ -95,5 +117,45 @@
         </footer>
     </div>
 
+    <!-- ==================== COMING SOON MODAL ==================== -->
+    <!-- Fully smooth glass modal – easy to customize -->
+    <div id="comingSoonModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-icon">📖✨</div>
+                <h2>HIFZ Section</h2>
+                <div class="modal-status">Coming Soon</div>
+                <p class="modal-text">
+                    Advanced Hifz tracking, Padam, Sabk, Murajah and progress analytics<br>
+                    are being prepared with utmost care.
+                </p>
+                <p class="modal-subtext">Stay tuned — launching very soon!</p>
+                
+                <button onclick="hideComingSoonModal()" class="btn btn-primary modal-close-btn">
+                    Got it, thanks!
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- ======================================================== -->
+
+    <script>
+        // Show Coming Soon Modal (super smooth)
+        function showComingSoonModal() {
+            const modal = document.getElementById('comingSoonModal');
+            modal.classList.add('active');
+        }
+
+        // Hide Coming Soon Modal
+        function hideComingSoonModal() {
+            const modal = document.getElementById('comingSoonModal');
+            modal.classList.remove('active');
+        }
+
+        // Optional: Close modal when clicking outside
+        document.getElementById('comingSoonModal').addEventListener('click', function(e) {
+            if (e.target === this) hideComingSoonModal();
+        });
+    </script>
 </body>
 </html>

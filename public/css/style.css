@@ -368,3 +368,160 @@
                 grid-template-columns: 1fr;
             }
         }
+
+
+
+
+        /* ============================================================ */
+/* COMING SOON HIFZ CARD & MODAL - EASY TO CUSTOMIZE */
+/* ============================================================ */
+
+/* Coming Soon Card */
+.coming-soon-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.coming-soon-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.08), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Coming Soon Badge */
+.coming-soon-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #eab308;
+    color: #1e2937;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px -2px rgba(234, 179, 8, 0.3);
+    z-index: 2;
+    letter-spacing: 0.5px;
+    transition: all 0.3s var(--ease-smooth);
+}
+
+.coming-soon-card:hover .coming-soon-badge {
+    transform: scale(1.05);
+}
+
+/* Coming Soon Link Style */
+.coming-soon-link {
+    color: #eab308;
+    font-weight: 700;
+}
+
+/* Coming Soon Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-smooth);
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: var(--main-radius);
+    width: 100%;
+    max-width: 460px;
+    box-shadow: var(--soft-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+    animation: modalPop 0.4s var(--ease-smooth);
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-body {
+    padding: 3rem 2.5rem;
+    text-align: center;
+}
+
+.modal-icon {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+.modal-status {
+    display: inline-block;
+    background: #eab308;
+    color: #1e2937;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 8px 28px;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.modal-content h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text-heading);
+}
+
+.modal-text {
+    color: var(--text-sub);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.modal-subtext {
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.modal-close-btn {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 1.1rem;
+    font-size: 1.1rem;
+}
+
+/* Floating icon animation */
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+/* Responsive modal */
+@media (max-width: 640px) {
+    .modal-body {
+        padding: 2.5rem 1.8rem;
+    }
+}

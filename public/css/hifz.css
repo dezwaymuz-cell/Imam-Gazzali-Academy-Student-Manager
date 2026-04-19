@@ -1,0 +1,230 @@
+ /* ACADEMY SMOOTH DESIGN LANGUAGE
+           Colors & Specs from gazzali-design.pdf
+        */
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --surface-bg: #F8FAFC;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --text-heading: #1E293B;
+            --text-sub: #64748B;
+            --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --soft-shadow: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
+            --main-radius: 2rem;
+            --component-radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--surface-bg);
+            color: var(--text-heading);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: clamp(1rem, 5vw, 3rem);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Depth Orbs */
+        .bg-orb {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .orb-1 { top: -10%; right: -10%; background: #E0E7FF; }
+        .orb-2 { bottom: -10%; left: -10%; background: #EFF6FF; }
+
+        @keyframes entrance {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--main-radius);
+            box-shadow: var(--soft-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: clamp(1.5rem, 5vw, 3rem);
+            animation: entrance 0.8s var(--ease-smooth) forwards;
+        }
+
+        /* Header Section */
+        header {
+            margin-bottom: 2.5rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.3s var(--ease-smooth);
+        }
+
+        .back-link:hover { color: var(--primary); }
+
+        h1 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+
+        /* Search & Filter Controls */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            padding-left: 3rem;
+            border-radius: var(--component-radius);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: white;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-heading);
+            transition: all 0.3s var(--ease-smooth);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            pointer-events: none;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .filter-group::-webkit-scrollbar { display: none; }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: white;
+            color: var(--text-sub);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Student List Grid */
+        .student-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .student-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 1.25rem 1.75rem;
+            border-radius: var(--component-radius);
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(241, 245, 249, 1);
+            transition: all 0.4s var(--ease-smooth);
+            animation: entrance 0.6s var(--ease-smooth) both;
+        }
+
+        .student-item:hover {
+            transform: translateY(-3px) scale(1.01);
+            border-color: var(--primary);
+            box-shadow: var(--soft-shadow);
+        }
+
+        .student-item:active {
+            transform: scale(0.98);
+        }
+
+        .student-info h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .class-badge {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.08);
+            padding: 4px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+
+        .no-results h2 { color: var(--text-sub); font-weight: 600; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .page-container { padding: 1.5rem; }
+            .student-item { padding: 1rem; }
+        }
