@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Report | <%= student.name %></title>
+    <!-- Tailwind for layout, custom CSS for the Smooth Design System -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-accent: #4F46E5;
+            --surface-bg: #F8FAFC;
+            --glass-card: rgba(255, 255, 255, 0.8);
+            --text-heading: #1E293B;
+            --text-sub: #64748B;
+            --smooth-timing: cubic-bezier(0.16, 1, 0.3, 1);
+            --soft-shadow: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--surface-bg);
+            color: var(--text-heading);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 5rem;
+        }
+
+        /* Academy Smooth Background Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .orb-1 { width: 40vw; height: 40vw; background: #E0E7FF; top: -10%; right: -5%; }
+        .orb-2 { width: 30vw; height: 30vw; background: #EFF6FF; bottom: 10%; left: -5%; }
+
+        /* Smooth Entrance Animation */
+        .entrance-anim {
+            animation: fadeInUp 0.8s var(--smooth-timing) forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 2rem; /* 32px as per PDF */
+            box-shadow: var(--soft-shadow);
+        }
+
+        .juz-highlight {
+            background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+            color: white;
+            border-radius: 2rem;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+        }
+
+        .progress-row {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s var(--smooth-timing);
+            border: 1px solid transparent;
+        }
+
+        .progress-row:hover {
+            transform: translateY(-2px);
+            border-color: #E2E8F0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+        }
+
+        .year-divider {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin: 2.5rem 0 1.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .year-divider::after {
+            content: "";
+            height: 1px;
+            background: #E2E8F0;
+            flex: 1;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s var(--smooth-timing);
+            box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgba(37, 211, 102, 0.4);
+            opacity: 0.95;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+        }
+
+        .label-pill {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-sub);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .val-text {
+            font-weight: 600;
+            color: var(--text-heading);
+        }
+
+        /* Adaptive Whitespace */
+        .content-container {
+            padding: clamp(1rem, 5vw, 3rem);
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <main class="max-w-4xl mx-auto content-container">
+        
+        <!-- Header -->
+        <header class="mb-10 text-center md:text-left entrance-anim" style="animation-delay: 0.1s;">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold mb-4">
+                <i class="fa-solid fa-star"></i>
+                ACADEMY PORTAL
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-2">Hifz Progress Report</h1>
+            <p class="text-slate-500 font-medium">Track your child’s memorization journey</p>
+        </header>
+
+        <!-- Top Section: Student Info & Juz Highlight -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
+            <!-- Student Info -->
+            <div class="md:col-span-3 glass-card p-8 flex flex-col justify-center entrance-anim" style="animation-delay: 0.2s;">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Student Profile</h2>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold">Student Name</p>
+                            <p class="text-xl font-bold"><%= student.name %></p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold mb-1">Parent/Guardian</p>
+                            <p class="font-bold text-slate-700"><%= student.parentName %></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold mb-1">Contact</p>
+                            <p class="font-bold text-slate-700"><%= student.phone %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Juz Box -->
+            <div class="md:col-span-2 juz-highlight flex flex-col items-center justify-center entrance-anim" style="animation-delay: 0.3s;">
+                <p class="text-indigo-100 font-bold tracking-widest text-xs uppercase mb-2">Current Milestone</p>
+                <div class="text-6xl md:text-7xl font-black mb-2"><%= student.currentJuz || '0' %></div>
+                <p class="text-xl font-medium opacity-90">Juz Completed</p>
+                <div class="mt-6 w-12 h-1 bg-white/30 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Progress History -->
+        <section class="entrance-anim" style="animation-delay: 0.4s;">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-chart-line text-indigo-500"></i>
+                Memorization History
+            </h2>
+
+            <% if (student.progress && student.progress.length > 0) { %>
+                <% 
+                    // Grouping progress by year for clean layout
+                    const grouped = {};
+                    student.progress.forEach(p => {
+                        if (!grouped[p.year]) grouped[p.year] = [];
+                        grouped[p.year].push(p);
+                    });
+                    const years = Object.keys(grouped).sort((a, b) => b - a);
+                %>
+
+                <% years.forEach(year => { %>
+                    <div class="year-divider"><%= year %></div>
+                    <div class="space-y-4">
+                        <% grouped[year].forEach(log => { %>
+                            <div class="progress-row flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="w-full sm:w-32">
+                                    <span class="text-lg font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl inline-block w-full text-center sm:text-left">
+                                        <%= log.month %>
+                                    </span>
+                                </div>
+                                
+                                <div class="flex-1 w-full grid grid-cols-3 gap-2 text-center">
+                                    <div class="bg-slate-50/50 p-2 rounded-lg">
+                                        <p class="label-pill">Padam</p>
+                                        <p class="val-text"><%= log.padam %></p>
+                                    </div>
+                                    <div class="bg-slate-50/50 p-2 rounded-lg">
+                                        <p class="label-pill">Sabk Juz</p>
+                                        <p class="val-text"><%= log.sabkJuz %></p>
+                                    </div>
+                                    <div class="bg-slate-50/50 p-2 rounded-lg">
+                                        <p class="label-pill">Murajah</p>
+                                        <p class="val-text"><%= log.murajah %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="glass-card p-12 text-center">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-box-open text-slate-300 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-700 mb-2">No updates yet</h3>
+                    <p class="text-slate-400">Monthly progress updates will appear here once available.</p>
+                </div>
+            <% } %>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="mt-16 entrance-anim" style="animation-delay: 0.5s;">
+            <div class="glass-card p-8 md:p-12 text-center bg-white/90">
+                <h3 class="text-2xl font-bold mb-3">Questions about progress?</h3>
+                <p class="text-slate-500 mb-8 max-w-md mx-auto">Our Usthad is available to discuss your child's memorization plan and answer any queries.</p>
+                
+                <a href="https://wa.me/919526578488?text=Assalamu%20Alaikum,%20I%20would%20like%20to%20know%20about%20my%20child’s%20Hifz%20progress." 
+                   target="_blank" 
+                   class="btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    Contact Usthad on WhatsApp
+                </a>
+            </div>
+        </section>
+
+        <footer class="mt-16 text-center">
+            <p class="text-slate-400 text-sm font-medium">Verified Official Academic Progress Report &bull; 2026</p>
+        </footer>
+    </main>
+
+    <script>
+        // Smooth entrance for individual rows
+        document.querySelectorAll('.progress-row').forEach((row, index) => {
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                row.style.transition = 'all 0.6s var(--smooth-timing)';
+                row.style.opacity = '1';
+                row.style.transform = 'translateY(0)';
+            }, 600 + (index * 50));
+        });
+    </script>
+</body>
+</html>

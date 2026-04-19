@@ -1,0 +1,157 @@
+  :root {
+            --primary-accent: #4F46E5;
+            --surface-bg: #F8FAFC;
+            --glass-card: rgba(255, 255, 255, 0.8);
+            --text-heading: #1E293B;
+            --text-sub: #64748B;
+            --error-bg: #FEF2F2;
+            --error-text: #DC2626;
+            --smooth-timing: cubic-bezier(0.16, 1, 0.3, 1);
+            --soft-shadow: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--surface-bg);
+            color: var(--text-heading);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Academy Smooth Background Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .orb-1 { width: 45vw; height: 45vw; background: #E0E7FF; top: -15%; right: -10%; }
+        .orb-2 { width: 35vw; height: 35vw; background: #EFF6FF; bottom: -10%; left: -5%; }
+
+        /* Smooth Entrance Animation */
+        .entrance-anim {
+            animation: fadeInUp 0.8s var(--smooth-timing) forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 2rem; /* 32px as per PDF */
+            box-shadow: var(--soft-shadow);
+            width: 100%;
+            max-width: 440px;
+            padding: clamp(1.5rem, 8vw, 2.5rem);
+            margin: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .label-smooth {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-sub);
+            margin-bottom: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        .input-smooth {
+            width: 100%;
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem; /* 12px as per PDF */
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s var(--smooth-timing);
+            outline: none;
+            color: var(--text-heading);
+        }
+
+        .input-smooth:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary-smooth {
+            width: 100%;
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s var(--smooth-timing);
+            min-height: 48px; /* Touch target safety */
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary-smooth:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary-smooth:active {
+            transform: scale(0.98);
+        }
+
+        /* Styled Error Box */
+        .error-box {
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            display: flex;
+            animation: shake 0.3s;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(220, 38, 38, 0.1);
+            animation: shake 0.4s var(--smooth-timing);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .portal-icon {
+            width: 56px;
+            height: 56px;
+            background: #EEF2FF;
+            color: var(--primary-accent);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
