@@ -37,6 +37,7 @@ exports.getHifzOneStudent = async (req, res) => {
 
 
 exports.updateCurrentJuz = async (req, res) => {
+  
   try {
     const studentId = req.params.id;
     const { currentJuz } = req.body;
@@ -61,7 +62,7 @@ exports.updateCurrentJuz = async (req, res) => {
     }
 
     // ✅ Redirect back
-    res.redirect(`/hifz/student/${studentId}`);
+    res.redirect(`/hifz/progress/student/${studentId}`);
 
   } catch (err) {
     console.log(err);
@@ -110,7 +111,7 @@ exports.addProgress = async (req, res) => {
     await student.save();
 
     // ✅ Redirect back to same page
-    res.redirect(`/hifz/student/${studentId}`);
+    res.redirect(`/hifz/progress/student/${studentId}`);
 
   } catch (err) {
     console.log(err);
