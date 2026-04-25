@@ -13,12 +13,10 @@ router.use(isLoggedIn);
  router.get('/',getHifzManagement)
 
 router.get('/progress',getHifzStudents);
-
 router.get('/progress/student/:id', getHifzOneStudent);
 
-router.post('/student/:id/update-juz',updateCurrentJuz)
+router.post('/progress/student/:id/update-juz',updateCurrentJuz)
+router.post('/progress/student/:id/add-progress',addProgress)
 
-router.post('/student/:id/add-progress',addProgress)
 
-
-module.exports = router; 
+module.exports = router;  

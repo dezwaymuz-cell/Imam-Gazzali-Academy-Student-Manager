@@ -42,7 +42,7 @@
                     <label>Current Status</label>
                     <span class="highlight-juz"><%= student.currentJuz || 'N/A' %> <small style="font-size: 0.8rem; font-weight: 500;">Juz</small></span>
                     
-                    <form action="/hifz/student/<%= student._id %>/update-juz" method="POST" class="inline-form">
+                    <form action="/hifz/progress/student/<%= student._id %>/update-juz" method="POST" class="inline-form">
                         <input type="text" name="currentJuz" class="input-smooth" placeholder="Update Juz...">
                         <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Set</button>
                     </form>
@@ -104,7 +104,7 @@
     <div class="modal" id="progressModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 1.5rem; font-weight: 800;">Add Progress</h2>
-            <form action="/hifz/student/<%= student._id %>/add-progress" method="POST">
+            <form action="/hifz/progress/student/<%= student._id %>/add-progress" method="POST">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
                         <label>Year</label>

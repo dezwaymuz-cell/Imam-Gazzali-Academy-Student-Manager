@@ -3,262 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hifz Management | Academy</title>
-    <!-- Tailwind CSS for utility layout -->
+    <title>Hifz Management | Imam Gazzali Academy</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* Academy Smooth Design Language Implementation */
         :root {
-            --primary-accent: #4F46E5;
+            /* 1. Color Palette */
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
             --surface-bg: #F8FAFC;
-            --glass-card: rgba(255, 255, 255, 0.8);
-            --heading-color: #1E293B;
-            --subtext-color: #64748B;
-            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            --shadow-soft: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --text-heading: #1E293B;
+            --text-sub: #64748B;
+            
+            /* 2. Visual Elements */
+            --soft-shadow: 0 20px 25px 5px rgba(0, 0, 0, 0.05);
+            --main-radius: 2rem;
+            --component-radius: 0.75rem;
+            
+            /* 3. Motion & Smoothness */
+            --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-speed: 0.5s;
         }
 
         body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--surface-bg);
-            color: var(--heading-color);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            overflow-x: hidden;
+            color: var(--text-heading);
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Decorative Background Orbs */
-        .orb {
-            position: absolute;
-            width: 500px;
-            height: 500px;
+        /* Depth Orbs */
+        .bg-orb {
+            position: fixed;
+            width: 45vw;
+            height: 45vw;
             border-radius: 50%;
             filter: blur(100px);
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.5;
         }
-        .orb-1 {
-            background: #E0E7FF; /* Indigo-100 */
-            top: -100px;
-            right: -100px;
-        }
-        .orb-2 {
-            background: #EFF6FF; /* Blue-50 */
-            bottom: -100px;
-            left: -100px;
+        .orb-1 { top: -10vh; right: -10vw; background: #E0E7FF; }
+        .orb-2 { bottom: -10vh; left: -10vw; background: #EFF6FF; }
+
+        /* Entrance Animation */
+        @keyframes staggeredEntrance {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Container & Grid Fluid Scaling */
-        .dashboard-container {
-            padding: clamp(1.5rem, 5vw, 4rem);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Glass Card Component */
-        .glass-card {
-            background: var(--glass-card);
+        .dashboard-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: clamp(1rem, 3vw, 2rem) auto;
+            background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 2rem; /* 32px as per PDF */
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition-smooth);
+            border-radius: var(--main-radius);
+            box-shadow: var(--soft-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            animation: staggeredEntrance 1s var(--ease-smooth) forwards;
+            padding: clamp(1.5rem, 4vw, 3.5rem);
+        }
+
+        /* Back Button */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-sub);
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--component-radius);
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all var(--transition-speed) var(--ease-smooth);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .btn-back:hover {
+            background: white;
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateX(-4px);
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--component-radius);
+            border: 1px solid rgba(241, 245, 249, 1);
+            transition: all var(--transition-speed) var(--ease-smooth);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             height: 100%;
         }
 
         .glass-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 30px 40px 5px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+            box-shadow: var(--soft-shadow);
         }
 
-        /* Button Styling */
-        .btn-primary {
-            background-color: var(--primary-accent);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem; /* 12px */
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px; /* Touch target safety */
-            transition: var(--transition-smooth);
-            width: 100%;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        .btn-disabled {
-            background-color: #E2E8F0;
-            color: #94A3B8;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        /* Entrance Animations */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(15px);
-            animation: fadeInUpAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes fadeInUpAnim {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-
-        /* Icon Styling */
-        .icon-circle {
+        .icon-box {
             width: 56px;
             height: 56px;
-            border-radius: 1rem;
-            background: #EEF2FF;
-            color: var(--primary-accent);
+            background: var(--surface-bg);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: all 0.4s var(--ease-smooth);
         }
 
-        .btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #64748B; /* Slate-500 Subtext */
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 0.75rem; /* 12px Corner Radii */
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid #E2E8F0; /* Print-standard light grey border */
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
+        .glass-card:hover .icon-box {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
 
-.btn-back:hover {
-    background: #FFFFFF;
-    color: #4F46E5; /* Indigo-600 */
-    border-color: #4F46E5;
-    transform: translateX(-4px); /* Subtle smooth motion */
-}
+        /* Primary Button */
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: var(--component-radius);
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all var(--transition-speed) var(--ease-smooth);
+            border: none;
+            margin-top: auto;
+        }
 
-.btn-back:active {
-    transform: scale(0.98); /* Interaction scale down */
-}
+        .btn-primary:hover:not(.btn-disabled) {
+            background: var(--primary-hover);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-disabled {
+            background: #E2E8F0;
+            color: #94A3B8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Header Styling */
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-heading);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-sub);
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 3.5rem;
+        }
+
+        /* Staggered load effect */
+        .stagger-1 { animation: staggeredEntrance 1s var(--ease-smooth) 0.1s both; }
+        .stagger-2 { animation: staggeredEntrance 1s var(--ease-smooth) 0.2s both; }
+        .stagger-3 { animation: staggeredEntrance 1s var(--ease-smooth) 0.3s both; }
+
     </style>
 </head>
 <body>
-    <!-- Background Orbs -->
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
 
-    <main class="dashboard-container">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
 
-        <div class="mb-6 fade-in" style="animation-delay: 0.05s;">
-    <a href="/dashboard" class="btn-back">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        <span>Back to Dashboard</span>
-    </a>
-</div>
-        <!-- Header Section -->
-        <header class="mb-12 text-center md:text-left fade-in-up">
-            <div class="flex items-center justify-center md:justify-start gap-4 mb-3">
-                <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                </div>
-                <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-800">Hifz Management</h1>
-            </div>
-            <p class="text-slate-500 text-lg md:max-w-xl">
-                Track and manage memorization progress efficiently across all levels of the academy.
-            </p>
+    <main class="dashboard-wrapper">
+        <a href="/dashboard" class="btn-back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Dashboard
+        </a>
+
+        <header>
+            <h1 class="page-title">Hifz Management</h1>
+            <p class="page-subtitle">Track and manage memorization progress efficiently across all levels of the academy with professional precision.</p>
         </header>
 
-        <!-- Feature Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            <!-- Card 1: Progress Tracking -->
-            <div class="glass-card p-8 fade-in-up stagger-1">
-                <div>
-                    <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
-                    </div>
-                    <h2 class="text-xl font-bold mb-3 text-slate-800">Progress Tracking</h2>
-                    <p class="text-slate-500 mb-8 leading-relaxed">
-                        View and manage Hifz students' memorization progress including Padam, Sabk Juz, and Murajah.
-                    </p>
+            <div class="glass-card stagger-1">
+                <div class="icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
                 </div>
+                <h3 class="text-xl font-bold mb-3">Progress Tracking</h3>
+                <p class="text-slate-500 mb-8 leading-relaxed">View and manage Hifz students' memorization progress including Padam, Sabk Juz, and Murajah.</p>
                 <a href="/hifz/progress" class="btn-primary">
-                    View Hifz Students 
-                    <svg class="ml-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    View Hifz Students
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
             </div>
 
-            <!-- Card 2: Attendance -->
-            <div class="glass-card p-8 fade-in-up stagger-2">
-                <div>
-                    <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <h2 class="text-xl font-bold mb-3 text-slate-800">Attendance</h2>
-                    <p class="text-slate-500 mb-8 leading-relaxed">
-                        Track daily attendance and maintain historical records for every Hifz student automatically.
-                    </p>
+             <div class="glass-card stagger-2">
+                <div class="icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
                 </div>
-                <button class="btn-primary btn-disabled">
-                    Coming Soon
-                </button>
+                <h3 class="text-xl font-bold mb-3">Usthad Management</h3>
+                <p class="text-slate-500 mb-8 leading-relaxed">Manage and organize usthads efficiently by assigning them to classes and maintaining their access within the system.</p>
+                <a href="/hifz/usthads" class="btn-primary">
+                    Manage Usthads
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
             </div>
 
-            <!-- Card 3: Reports -->
-            <div class="glass-card p-8 fade-in-up stagger-3">
-                <div>
-                    <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </div>
-                    <h2 class="text-xl font-bold mb-3 text-slate-800">Reports</h2>
-                    <p class="text-slate-500 mb-8 leading-relaxed">
-                        Generate and view structured reports of student progress, performance metrics, and insights.
-                    </p>
+            <div class="glass-card stagger-3">
+                <div class="icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </div>
-                <button class="btn-primary btn-disabled">
-                    Coming Soon
-                </button>
+                <h3 class="text-xl font-bold mb-3">Attendance</h3>
+                <p class="text-slate-500 mb-8 leading-relaxed">Track daily attendance and maintain historical records for every Hifz student automatically.</p>
+                <button class="btn-primary btn-disabled">Coming Soon</button>
+            </div>
+
+            <div class="glass-card stagger-4">
+                <div class="icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Reports</h3>
+                <p class="text-slate-500 mb-8 leading-relaxed">Generate and view structured reports of student progress, performance metrics, and insights.</p>
+                <button class="btn-primary btn-disabled">Coming Soon</button>
             </div>
 
         </div>
 
-        <!-- Footer Link (Optional) -->
-        <footer class="mt-16 pt-8 border-t border-slate-200 text-center text-slate-400 text-sm fade-in-up stagger-3">
-            Academy Management System • Design Language v1.0
+        <footer class="mt-16 pt-8 border-t border-slate-200/50 text-center text-slate-400 text-sm font-semibold stagger-3">
+            &copy; 2026 Imam Gazzali Academy • Professional Management Suite
         </footer>
     </main>
-
-    <script>
-        // Simple script to handle visual feedback on touch/click
-        document.querySelectorAll('.btn-primary:not(.btn-disabled)').forEach(button => {
-            button.addEventListener('mousedown', () => {
-                button.style.transform = 'scale(0.98)';
-            });
-            button.addEventListener('mouseup', () => {
-                button.style.transform = 'scale(1)';
-            });
-            button.addEventListener('mouseleave', () => {
-                button.style.transform = 'scale(1)';
-            });
-        });
-    </script>
 </body>
-</html>
+</html>  
