@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getHifzStudents, getHifzOneStudent, updateCurrentJuz, addProgress } = require('../controllers/hifzStudentController')
+const { getHifzStudents, getHifzOneStudent, updateCurrentJuz, addProgress, getHifzManagement } = require('../controllers/hifzStudentController')
 const { isLoggedIn } = require('../middlewares/authMiddleware');
 
 const { getParentLoginPage, postParentLogin } = require('../controllers/parentController');
@@ -10,10 +10,11 @@ router.get('/parent', getParentLoginPage);
 router.post('/parent', postParentLogin);
 
 router.use(isLoggedIn);
+ router.get('/',getHifzManagement)
 
-router.get('/',getHifzStudents);
+router.get('/progress',getHifzStudents);
 
-router.get('/student/:id', getHifzOneStudent);
+router.get('/progress/student/:id', getHifzOneStudent);
 
 router.post('/student/:id/update-juz',updateCurrentJuz)
 

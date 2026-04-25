@@ -1,5 +1,14 @@
 const studentShm = require('../models/Student Schema');
 
+exports.getHifzManagement = async (req, res) => {
+  try {
+    res.render('hifz-management');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading Hifz Management");
+  }
+};
+
 exports.getHifzStudents = async (req, res) => {
   try {
     const st = await studentShm
@@ -17,8 +26,8 @@ exports.getHifzStudents = async (req, res) => {
 exports.getHifzOneStudent = async (req, res) => {
   try {
     const student = await studentShm.findById(req.params.id).select('_id name class parentName phone currentJuz progress');
-    
-    res.render('hifz-student',{student});
+
+    res.render('hifz-student', { student });
 
   } catch (err) {
     console.log(err);

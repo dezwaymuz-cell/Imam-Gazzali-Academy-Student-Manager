@@ -16,7 +16,7 @@
 
     <div class="page-container">
         <header>
-            <a href="/dashboard" class="back-link">← Dashboard</a>
+            <a href="/hifz" class="back-link">← Hifz Management</a>
             <h1>Hifz Directory</h1>
             <p class="subtitle">Search and manage student profiles</p>
         </header>
@@ -45,7 +45,7 @@
         <div class="student-list" id="studentList">
             <% if (st && st.length > 0) { %>
                 <% st.forEach((student, index) => { %>
-                    <a href="/hifz/student/<%= student._id %>" 
+                    <a href="/hifz/progress/student/<%= student._id %>" 
                        class="student-item" 
                        data-name="<%= student.name.toLowerCase() %>" 
                        data-class="<%= student.class %>"
