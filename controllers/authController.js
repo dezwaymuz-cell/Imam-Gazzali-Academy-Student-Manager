@@ -6,7 +6,7 @@
 // }
 
 const loginCredintials = {
-  userName : "Gazzali",
+  userName : "Gazzali", 
   password : 313
 }
 

@@ -5,6 +5,7 @@ const { getHifzStudents, getHifzOneStudent, updateCurrentJuz, addProgress, getHi
 const { isLoggedIn } = require('../middlewares/authMiddleware');
 
 const { getParentLoginPage, postParentLogin } = require('../controllers/parentController');
+const {getAllUsthads, addUsthad, updateUsthad, deleteUsthad} = require('../controllers/usthadController');
 
 router.get('/parent', getParentLoginPage);
 router.post('/parent', postParentLogin);
@@ -18,5 +19,9 @@ router.get('/progress/student/:id', getHifzOneStudent);
 router.post('/progress/student/:id/update-juz',updateCurrentJuz)
 router.post('/progress/student/:id/add-progress',addProgress)
 
-
+// Load main page
+router.get('/usthads', getAllUsthads);
+router.post('/usthad/add', addUsthad)        
+router.post('/usthad/edit/:id', updateUsthad);
+router.post('/usthad/delete/:id', deleteUsthad);
 module.exports = router;  
