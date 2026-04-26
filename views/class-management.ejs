@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Class Management | Academy</title>
+    <!-- Tailwind CSS for utility Layouts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-accent: #4F46E5;
+            --surface-bg: #F8FAFC;
+            --text-heading: #1E293B;
+            --text-subtext: #64748B;
+            --error-bg: #FEF2F2;
+            --error-text: #DC2626;
+            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Smooth Physics */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            scrollbar-width: thin;
+            scrollbar-color: #E2E8F0 transparent;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--surface-bg);
+            color: var(--text-heading);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        body.modal-open { overflow: hidden; }
+
+        /* Background Orbs */
+        .orb {
+            position: fixed;
+            width: 80vw;
+            height: 80vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .orb-indigo { background: #E0E7FF; top: -20%; left: -20%; }
+        .orb-blue { background: #EFF6FF; bottom: -20%; right: -20%; }
+
+        /* Smooth Entrance */
+        .stagger-in {
+            opacity: 0;
+            transform: translateY(15px);
+            animation: entrance 0.8s var(--transition-smooth) forwards;
+        }
+        @keyframes entrance { to { opacity: 1; transform: translateY(0); } }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: clamp(1.5rem, 5vw, 2rem);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        .class-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 25px 40px -10px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Buttons & Inputs */
+        .btn-primary {
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 0.875rem 1.75rem;
+            border-radius: 1rem;
+            transition: all 0.3s var(--transition-smooth);
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.625rem; font-weight: 600;
+        }
+        .btn-primary:active { transform: scale(0.96); }
+
+        .btn-outline {
+            border: 1.5px solid #E2E8F0;
+            background: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 1rem;
+            transition: all 0.3s var(--transition-smooth);
+            color: var(--text-subtext);
+            font-weight: 500;
+        }
+        .btn-outline:hover { 
+            background: #F8FAFC; 
+            border-color: var(--primary-accent);
+            color: var(--primary-accent); 
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1.125rem;
+            border-radius: 1rem;
+            border: 1.5px solid #E2E8F0;
+            background: white; outline: none;
+            transition: all 0.2s ease;
+            appearance: none;
+        }
+        .form-input:focus { 
+            border-color: var(--primary-accent); 
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Mobile-First Transfer List */
+        .transfer-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .transfer-list-container {
+                display: grid;
+                grid-template-columns: 1fr 50px 1fr;
+                align-items: center;
+            }
+        }
+
+        .student-list {
+            height: 280px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 1.25rem;
+            background: white;
+            padding: 0.5rem;
+            -webkit-overflow-scrolling: touch; /* Momentum scrolling */
+        }
+
+        .student-item {
+            padding: 0.875rem 1rem;
+            cursor: pointer;
+            font-size: 0.9375rem;
+            transition: all 0.2s var(--transition-smooth);
+            border-radius: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+            user-select: none;
+        }
+
+        .student-item:hover { background: #F1F5F9; }
+        .student-item.selected {
+            background: #EEF2FF;
+            color: var(--primary-accent);
+            font-weight: 600;
+            transform: translateX(4px);
+        }
+
+        .transfer-controls {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .transfer-controls {
+                flex-direction: column;
+            }
+        }
+
+        /* Modal Overlays */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            display: flex; align-items: flex-end; justify-content: center;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px); opacity: 0; pointer-events: none;
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        @media (min-width: 640px) {
+            .modal-overlay { align-items: center; padding: 1.5rem; }
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-box {
+            transform: translateY(100%);
+            transition: all 0.5s var(--transition-smooth);
+            width: 100%;
+            max-width: 44rem;
+            background: white;
+            border-radius: 2rem 2rem 0 0;
+            padding: 2rem;
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+
+        @media (min-width: 640px) {
+            .modal-box {
+                transform: scale(0.95) translateY(30px);
+                border-radius: 2.5rem;
+            }
+        }
+
+        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+
+        /* Custom Scrollbar */
+        .student-list::-webkit-scrollbar { width: 5px; }
+        .student-list::-webkit-scrollbar-track { background: transparent; }
+        .student-list::-webkit-scrollbar-thumb { 
+            background: #E2E8F0; 
+            border-radius: 10px;
+        }
+
+          /* Back Button */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-sub);
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--component-radius);
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all var(--transition-speed) var(--ease-smooth);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .btn-back:hover {
+            background: white;
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateX(-4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-indigo"></div>
+    <div class="orb orb-blue"></div>
+
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+
+         <a href="/hifz" class="btn-back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Hifz Management
+        </a>
+
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 stagger-in" style="animation-delay: 0.1s">
+            <div>
+                <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">Classes</h1>
+                <p class="text-slate-500 mt-2 text-base md:text-lg">Manage your academy structure and student distribution.</p>
+            </div>
+            <button onclick="openAddModal()" class="btn-primary shadow-xl shadow-indigo-100 w-full md:w-auto">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i> Add New Class
+            </button>
+        </header>
+
+        <!-- Search Section -->
+        <div class="mt-10 mb-8 stagger-in" style="animation-delay: 0.2s">
+            <div class="relative max-w-md w-full">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                <input type="text" placeholder="Search by name or usthad..." class="form-input pl-12 shadow-sm border-none bg-white/60">
+            </div>
+        </div>
+
+        <!-- Class Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 stagger-in" style="animation-delay: 0.3s">
+            <% if (classes && classes.length > 0) { %>
+                <% classes.forEach(item => { %>
+                    <div class="glass-card class-card p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                    <i data-lucide="layout" class="w-7 h-7"></i>
+                                </div>
+                                <span class="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Active</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2"><%= item.name %></h3>
+                            <p class="text-slate-500 text-sm mb-6 line-clamp-2 leading-relaxed"><%= item.description || 'Seamless class management for better learning outcomes.' %></p>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div class="flex items-center gap-4 p-3 rounded-xl bg-white/40">
+                                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+                                        <i data-lucide="user-check" class="w-5 h-5 text-indigo-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400">Assigned Usthad</p>
+                                        <p class="text-slate-700 font-semibold text-sm">
+                                            <%= item.usthads && item.usthads.length > 0 ? (item.usthads[0].name || 'Lead Teacher') : 'Not Assigned' %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 p-3 rounded-xl bg-white/40">
+                                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+                                        <i data-lucide="graduation-cap" class="w-5 h-5 text-indigo-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400">Total Students</p>
+                                        <p class="text-slate-700 font-semibold text-sm"><%= item.students ? item.students.length : 0 %> Enrolled</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 pt-6 border-t border-slate-100/50">
+                            <button onclick="openEditModal('<%= JSON.stringify(item) %>')" class="btn-outline flex-1 flex justify-center items-center gap-2">
+                                <i data-lucide="sliders" class="w-4 h-4"></i> Manage
+                            </button>
+                            <button onclick="openDeleteModal('<%= item._id %>', '<%= item.name %>')" class="btn-outline flex-0 p-3 text-red-500 border-red-50/50 hover:bg-red-50 hover:border-red-200">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+    </main>
+
+    <!-- CLASS FORM MODAL -->
+    <div id="formModal" class="modal-overlay" onclick="closeModals(event)">
+        <div class="modal-box glass-card" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 id="modalTitle" class="text-2xl md:text-3xl font-extrabold text-slate-900">Add Class</h2>
+                    <p class="text-slate-500 text-sm mt-1">Fill in the details to structure your class.</p>
+                </div>
+                <button onclick="closeModals()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <form id="classForm" method="POST" class="space-y-6" onsubmit="prepareStudentsData()">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Class Name</label>
+                        <input type="text" id="fieldName" name="name" required class="form-input" placeholder="e.g. Advanced Hifz">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Assign Usthad</label>
+                        <div class="relative">
+                            <select id="fieldUsthad" name="usthads" required class="form-input pr-10">
+                                <option value="">Select a Teacher</option>
+                                <% if (typeof usthads !== 'undefined') { %>
+                                    <% usthads.forEach(u => { %>
+                                        <option value="<%= u._id %>"><%= u.name %></option>
+                                    <% }) %>
+                                <% } %>
+                            </select>
+                            <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Class Description</label>
+                    <textarea id="fieldDescription" name="description" rows="3" class="form-input resize-none" placeholder="Primary objectives and focus of this class..."></textarea>
+                </div>
+
+                <!-- DUAL LIST STUDENT SELECTION -->
+                <div class="space-y-4">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Enrolled Students</label>
+                    <div class="transfer-list-container">
+                        <!-- Available -->
+                        <div class="space-y-2">
+                            <p class="text-[10px] font-bold text-slate-400 text-center uppercase tracking-tighter">Available Students</p>
+                            <div id="availableList" class="student-list"></div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="transfer-controls">
+                            <button type="button" onclick="moveStudents('toSelected')" class="btn-primary p-0 w-12 h-12 rounded-full shadow-lg shadow-indigo-100 flex items-center justify-center">
+                                <i data-lucide="arrow-right-left" class="w-5 h-5 hidden md:block"></i>
+                                <i data-lucide="arrow-down-up" class="w-5 h-5 md:hidden"></i>
+                            </button>
+                        </div>
+
+                        <!-- Selected -->
+                        <div class="space-y-2">
+                            <p class="text-[10px] font-bold text-indigo-500 text-center uppercase tracking-tighter">Assigned to Class</p>
+                            <div id="selectedList" class="student-list border-indigo-100 bg-indigo-50/20"></div>
+                        </div>
+                    </div>
+                    <!-- Hidden input to store student IDs -->
+                    <div id="hiddenStudentsInputs"></div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-3 pt-6">
+                    <button type="button" onclick="closeModals()" class="btn-outline w-full md:w-auto md:px-12">Cancel</button>
+                    <button type="submit" id="formSubmitBtn" class="btn-primary w-full md:flex-1">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div id="deleteModal" class="modal-overlay" onclick="closeModals(event)">
+        <div class="modal-box glass-card max-w-sm text-center p-10" onclick="event.stopPropagation()">
+            <div class="w-20 h-20 bg-red-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <i data-lucide="trash-2" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Delete Class?</h2>
+            <p class="text-slate-500 text-sm mb-8 leading-relaxed">This will remove <span id="deleteClassName" class="font-bold text-slate-900"></span> permanently. Students will be unassigned.</p>
+            
+            <form id="deleteForm" method="POST" class="space-y-3">
+                <button type="submit" class="btn-primary bg-red-500 hover:bg-red-600 w-full">Delete Permanently</button>
+                <button type="button" onclick="closeModals()" class="btn-outline w-full border-none">Keep Class</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const allStudents = <%- JSON.stringify(typeof students !== 'undefined' ? students : []) %>;
+        
+        const formModal = document.getElementById('formModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const classForm = document.getElementById('classForm');
+        const availableListEl = document.getElementById('availableList');
+        const selectedListEl = document.getElementById('selectedList');
+
+        let selectedStudentIds = [];
+
+        function initIcons() { lucide.createIcons(); }
+        initIcons();
+
+        function renderStudentLists() {
+            availableListEl.innerHTML = '';
+            selectedListEl.innerHTML = '';
+
+            allStudents.forEach(student => {
+                const isSelected = selectedStudentIds.includes(student._id);
+                const item = document.createElement('div');
+                item.className = 'student-item';
+                item.dataset.id = student._id;
+                item.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-indigo-500 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                    <span class="truncate">${student.name}</span>
+                `;
+                
+                item.onclick = () => {
+                    item.classList.toggle('selected');
+                };
+                
+                item.ondblclick = () => {
+                    item.classList.add('selected');
+                    moveStudents(isSelected ? 'toAvailable' : 'toSelected');
+                };
+
+                if (isSelected) selectedListEl.appendChild(item);
+                else availableListEl.appendChild(item);
+            });
+            initIcons();
+        }
+
+        function moveStudents(direction) {
+            const list = direction === 'toSelected' ? availableListEl : selectedListEl;
+            const selectedItems = list.querySelectorAll('.student-item.selected');
+            
+            if (selectedItems.length === 0) return;
+
+            selectedItems.forEach(item => {
+                const id = item.dataset.id;
+                if (direction === 'toSelected') {
+                    if (!selectedStudentIds.includes(id)) selectedStudentIds.push(id);
+                } else {
+                    selectedStudentIds = selectedStudentIds.filter(sid => sid !== id);
+                }
+            });
+            
+            // Re-render
+            renderStudentLists();
+        }
+
+        function prepareStudentsData() {
+            const container = document.getElementById('hiddenStudentsInputs');
+            container.innerHTML = '';
+            selectedStudentIds.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'students';
+                input.value = id;
+                container.appendChild(input);
+            });
+        }
+
+        function openAddModal() {
+            classForm.action = "/hifz/classes/add";
+            document.getElementById('modalTitle').innerText = "Add Class";
+            classForm.reset();
+            selectedStudentIds = [];
+            renderStudentLists();
+            showModal(formModal);
+        }
+
+        function openEditModal(json) {
+            const data = JSON.parse(json);
+            classForm.action = `/hifz/classes/edit/${data._id}`;
+            document.getElementById('modalTitle').innerText = "Edit Class";
+
+            document.getElementById('fieldName').value = data.name;
+            document.getElementById('fieldDescription').value = data.description || '';
+            document.getElementById('fieldUsthad').value = data.usthads[0]?._id || data.usthads[0] || '';
+            
+            selectedStudentIds = data.students.map(s => s._id || s);
+            renderStudentLists();
+            
+            showModal(formModal);
+        }
+
+        function openDeleteModal(id, name) {
+            document.getElementById('deleteForm').action = `/hifz/classes/delete/${id}`;
+            document.getElementById('deleteClassName').innerText = name;
+            showModal(deleteModal);
+        }
+
+        function showModal(el) {
+            el.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModals(e) {
+            if (e && e.target !== e.currentTarget) return;
+            formModal.classList.remove('active');
+            deleteModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModals(); });
+    </script>
+</body>
+</html>

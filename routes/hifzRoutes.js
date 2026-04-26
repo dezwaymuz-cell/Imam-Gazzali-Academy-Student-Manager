@@ -7,6 +7,8 @@ const { isLoggedIn } = require('../middlewares/authMiddleware');
 const { getParentLoginPage, postParentLogin } = require('../controllers/parentController');
 const {getAllUsthads, addUsthad, updateUsthad, deleteUsthad} = require('../controllers/usthadController');
 
+const {getClassManagement, addClass, updateClass, deleteClass} = require('../controllers/hifzClassController')
+
 router.get('/parent', getParentLoginPage);
 router.post('/parent', postParentLogin);
 
@@ -24,4 +26,10 @@ router.get('/usthads', getAllUsthads);
 router.post('/usthad/add', addUsthad)        
 router.post('/usthad/edit/:id', updateUsthad);
 router.post('/usthad/delete/:id', deleteUsthad);
+
+router.get('/classes', getClassManagement);
+router.post('/classes/add', addClass)
+router.post('/classes/edit/:id',updateClass)
+router.post('/classes/delete/:id',deleteClass)
+
 module.exports = router;  
