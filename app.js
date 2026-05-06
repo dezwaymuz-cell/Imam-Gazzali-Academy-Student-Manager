@@ -48,7 +48,6 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 });
 
 
-
 app.use('/', authRouter); 
 app.use('/students', studentRouter);
 app.use('/hifz', hifzRouter)

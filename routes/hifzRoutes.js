@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+  const express = require('express');
+  const router = express.Router();
 
 const { getHifzStudents, getHifzOneStudent, updateCurrentJuz, addProgress, getHifzManagement } = require('../controllers/hifzStudentController')
 const { isLoggedIn } = require('../middlewares/authMiddleware');
