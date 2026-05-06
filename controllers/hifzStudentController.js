@@ -75,12 +75,32 @@ exports.addProgress = async (req, res) => {
   try {
     const studentId = req.params.id;
 
-    const { year, month, padam, sabkJuz, murajah } = req.body;
+    const { 
+      year, 
+      month, 
+      padam, 
+      sabkJuz, 
+      murajah, 
+      totalClasses, 
+      attendedClasses 
+    } = req.body;
 
     // ✅ Basic validation
     if (!year || !month || !padam || !sabkJuz || !murajah) {
       return res.send("All fields are required");
     }
+
+    // ✅ Attendance validation
+    const total = Number(totalClasses) || 0;
+    const attended = Number(attendedClasses) || 0;
+
+    if (total < 0 || attended < 0) {
+      return res.send("Class days cannot be negative");
+    }
+
+    if (attended > total) {
+      return res.status(400).send("Attended days cannot be greater than total class days");
+    }        
 
     // ✅ Find student
     const student = await studentShm.findById(studentId);
@@ -89,32 +109,33 @@ exports.addProgress = async (req, res) => {
       return res.send("Student not found");
     }
 
-    // ✅ Create progress object
+    // ✅ Create new progress object
     const newProgress = {
       year: Number(year),
       month,
       padam,
       sabkJuz,
-      murajah
+      murajah,
+      totalClasses: total,
+      attendedClasses: attended
     };
 
-    // ✅ Ensure progress array exists (extra safety)
+    // ✅ Ensure progress array exists
     if (!student.progress) {
       student.progress = [];
     }
 
-    // ✅ Push new progress
+    // ✅ Push new record
     student.progress.push(newProgress);
 
-
-    // ✅ Save
+    // ✅ Save to database
     await student.save();
 
-    // ✅ Redirect back to same page
+    // ✅ Redirect back
     res.redirect(`/hifz/progress/student/${studentId}`);
 
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.send("Error adding progress");
   }
 };

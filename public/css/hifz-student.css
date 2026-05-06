@@ -296,3 +296,65 @@
             }
             header { flex-direction: column; }
         }
+
+        /* === ATTENDANCE STYLES === */
+.progress-stat.att-green span {
+    color: #10b981;
+    font-weight: 800;
+}
+.progress-stat.att-yellow span {
+    color: #eab308;
+    font-weight: 800;
+}
+.progress-stat.att-red span {
+    color: #ef4444;
+    font-weight: 800;
+}
+
+/* Improve month card layout for more items */
+.month-card {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--component-radius);
+    display: grid;
+    grid-template-columns: 150px repeat(3, 1fr) repeat(3, 1fr); /* 6 columns total */
+    gap: 1rem 1.5rem;
+    align-items: start;
+    border: 1px solid rgba(241, 245, 249, 1);
+    transition: all 0.3s var(--ease-smooth);
+}
+
+.month-card:hover {
+    border-color: var(--primary);
+    transform: translateX(5px);
+    box-shadow: var(--soft-shadow);
+}
+
+.progress-stat {
+    min-width: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .month-card {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+    }
+    
+    .month-name {
+        grid-column: span 2;
+    }
+}
+
+
+/* Error Message */
+.error-message {
+    background: #fee2e2;
+    color: #ef4444;
+    padding: 12px 16px;
+    border-radius: var(--component-radius);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid #fecaca;
+}

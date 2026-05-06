@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Report | <%= student.name %></title>
-    <!-- Tailwind for layout, custom CSS for the Smooth Design System -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -27,7 +26,6 @@
             padding-bottom: 5rem;
         }
 
-        /* Academy Smooth Background Orbs */
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -38,7 +36,6 @@
         .orb-1 { width: 40vw; height: 40vw; background: #E0E7FF; top: -10%; right: -5%; }
         .orb-2 { width: 30vw; height: 30vw; background: #EFF6FF; bottom: 10%; left: -5%; }
 
-        /* Smooth Entrance Animation */
         .entrance-anim {
             animation: fadeInUp 0.8s var(--smooth-timing) forwards;
             opacity: 0;
@@ -46,19 +43,15 @@
         }
 
         @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Glassmorphism Components */
         .glass-card {
             background: var(--glass-card);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 2rem; /* 32px as per PDF */
+            border-radius: 2rem;
             box-shadow: var(--soft-shadow);
         }
 
@@ -74,7 +67,7 @@
         .progress-row {
             background: white;
             border-radius: 1.25rem;
-            padding: 1.25rem;
+            padding: 1.5rem;
             margin-bottom: 1rem;
             transition: all 0.3s var(--smooth-timing);
             border: 1px solid transparent;
@@ -103,7 +96,16 @@
             flex: 1;
         }
 
-        .btn-whatsapp {
+        .label-pill {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-sub);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+         .btn-whatsapp {
             background-color: #25D366;
             color: white;
             padding: 1rem 1.5rem;
@@ -140,7 +142,11 @@
             color: var(--text-heading);
         }
 
-        /* Adaptive Whitespace */
+        /* Attendance Colors */
+        .att-green .val-text { color: #10b981; font-weight: 700; }
+        .att-yellow .val-text { color: #eab308; font-weight: 700; }
+        .att-red .val-text { color: #ef4444; font-weight: 700; }
+
         .content-container {
             padding: clamp(1rem, 5vw, 3rem);
         }
@@ -164,7 +170,6 @@
 
         <!-- Top Section: Student Info & Juz Highlight -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
-            <!-- Student Info -->
             <div class="md:col-span-3 glass-card p-8 flex flex-col justify-center entrance-anim" style="animation-delay: 0.2s;">
                 <h2 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Student Profile</h2>
                 <div class="space-y-6">
@@ -190,12 +195,10 @@
                 </div>
             </div>
 
-            <!-- Current Juz Box -->
             <div class="md:col-span-2 juz-highlight flex flex-col items-center justify-center entrance-anim" style="animation-delay: 0.3s;">
                 <p class="text-indigo-100 font-bold tracking-widest text-xs uppercase mb-2">Current Milestone</p>
                 <div class="text-6xl md:text-7xl font-black mb-2"><%= student.currentJuz || '0' %></div>
                 <p class="text-xl font-medium opacity-90">Juz Completed</p>
-                <div class="mt-6 w-12 h-1 bg-white/30 rounded-full"></div>
             </div>
         </div>
 
@@ -208,7 +211,6 @@
 
             <% if (student.progress && student.progress.length > 0) { %>
                 <% 
-                    // Grouping progress by year for clean layout
                     const grouped = {};
                     student.progress.forEach(p => {
                         if (!grouped[p.year]) grouped[p.year] = [];
@@ -220,26 +222,53 @@
                 <% years.forEach(year => { %>
                     <div class="year-divider"><%= year %></div>
                     <div class="space-y-4">
-                        <% grouped[year].forEach(log => { %>
-                            <div class="progress-row flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <div class="w-full sm:w-32">
-                                    <span class="text-lg font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl inline-block w-full text-center sm:text-left">
+                        <% grouped[year].forEach(log => { 
+                            const total = log.totalClasses || 0;
+                            const attended = log.attendedClasses || 0;
+                            const percentage = total > 0 ? Math.round((attended / total) * 100) : 0;
+                            
+                            let attClass = '';
+                            if (percentage >= 90) attClass = 'att-green';
+                            else if (percentage >= 75) attClass = 'att-yellow';
+                            else if (percentage > 0) attClass = 'att-red';
+                        %>
+                            <div class="progress-row flex flex-col lg:flex-row items-start lg:items-center gap-6">
+                                <!-- Month -->
+                                <div class="w-full lg:w-32">
+                                    <span class="text-lg font-bold text-indigo-600 bg-indigo-50 px-5 py-3 rounded-2xl inline-block w-full text-center">
                                         <%= log.month %>
                                     </span>
                                 </div>
-                                
-                                <div class="flex-1 w-full grid grid-cols-3 gap-2 text-center">
-                                    <div class="bg-slate-50/50 p-2 rounded-lg">
+
+                                <!-- Main Progress -->
+                                <div class="flex-1 grid grid-cols-3 gap-3">
+                                    <div class="bg-slate-50/70 p-3 rounded-xl text-center">
                                         <p class="label-pill">Padam</p>
-                                        <p class="val-text"><%= log.padam %></p>
+                                        <p class="val-text text-base"><%= log.padam %></p>
                                     </div>
-                                    <div class="bg-slate-50/50 p-2 rounded-lg">
+                                    <div class="bg-slate-50/70 p-3 rounded-xl text-center">
                                         <p class="label-pill">Sabk Juz</p>
-                                        <p class="val-text"><%= log.sabkJuz %></p>
+                                        <p class="val-text text-base"><%= log.sabkJuz %></p>
                                     </div>
-                                    <div class="bg-slate-50/50 p-2 rounded-lg">
+                                    <div class="bg-slate-50/70 p-3 rounded-xl text-center">
                                         <p class="label-pill">Murajah</p>
-                                        <p class="val-text"><%= log.murajah %></p>
+                                        <p class="val-text text-base"><%= log.murajah %></p>
+                                    </div>
+                                </div>
+
+                                <!-- Attendance Section -->
+                                <div class="flex-1 grid grid-cols-3 gap-3 border-l border-slate-100 pl-6">
+                                    <div class="text-center">
+                                        <p class="label-pill">Total Classes</p>
+                                        <p class="val-text text-base"><%= total %></p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="label-pill">Attended</p>
+                                        <p class="val-text text-base"><%= attended %></p>
+                                    </div>
+                                    <div class="text-center <%= attClass %>">
+                                        <p class="label-pill">Attendance</p>
+                                        <p class="val-text text-lg"><%= percentage %>%</p>
                                     </div>
                                 </div>
                             </div>
@@ -265,7 +294,7 @@
                 
                 <a href="https://wa.me/919526578488?text=Assalamu%20Alaikum,%20I%20would%20like%20to%20know%20about%20my%20child’s%20Hifz%20progress." 
                    target="_blank" 
-                   class="btn-whatsapp">
+                   class="btn-whatsapp inline-flex items-center">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
                     Contact Usthad on WhatsApp
                 </a>
@@ -278,7 +307,6 @@
     </main>
 
     <script>
-        // Smooth entrance for individual rows
         document.querySelectorAll('.progress-row').forEach((row, index) => {
             row.style.opacity = '0';
             row.style.transform = 'translateY(10px)';

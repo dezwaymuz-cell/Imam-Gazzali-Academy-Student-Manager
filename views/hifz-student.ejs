@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= student.name %> | Hifz Portal</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/hifz-student.css">
-  
 </head>
 <body>
 
@@ -58,7 +56,6 @@
 
             <% if (student.progress && student.progress.length > 0) { %>
                 <% 
-                   // Group progress by year
                    const grouped = {};
                    student.progress.forEach(p => {
                        if(!grouped[p.year]) grouped[p.year] = [];
@@ -71,7 +68,15 @@
                     <div class="year-group">
                         <div class="year-title"><%= year %></div>
                         <div class="month-list">
-                            <% grouped[year].forEach(item => { %>
+                            <% grouped[year].forEach(item => { 
+                                const total = item.totalClasses || 0;
+                                const attended = item.attendedClasses || 0;
+                                const percentage = total > 0 ? Math.round((attended / total) * 100) : 0;
+                                let attClass = '';
+                                if (percentage >= 90) attClass = 'att-green';
+                                else if (percentage >= 75) attClass = 'att-yellow';
+                                else if (percentage > 0) attClass = 'att-red';
+                            %>
                                 <div class="month-card">
                                     <div class="month-name"><%= item.month %></div>
                                     <div class="progress-stat">
@@ -85,6 +90,18 @@
                                     <div class="progress-stat">
                                         <label>MURAJAH</label>
                                         <span><%= item.murajah %></span>
+                                    </div>
+                                    <div class="progress-stat">
+                                        <label>TOTAL CLASSES</label>
+                                        <span><%= total %></span>
+                                    </div>
+                                    <div class="progress-stat">
+                                        <label>ATTENDED</label>
+                                        <span><%= attended %></span>
+                                    </div>
+                                    <div class="progress-stat <%= attClass %>">
+                                        <label>ATTENDANCE</label>
+                                        <span><%= percentage %>%</span>
                                     </div>
                                 </div>
                             <% }) %>
@@ -103,14 +120,17 @@
     <!-- Add Progress Modal -->
     <div class="modal" id="progressModal">
         <div class="modal-content">
-            <h2 style="margin-bottom: 1.5rem; font-weight: 800;">Add Progress</h2>
-            <form action="/hifz/progress/student/<%= student._id %>/add-progress" method="POST">
+            <h2 style="margin-bottom: 1.5rem; font-weight: 800;">Add Monthly Progress</h2>
+            
+            <!-- Error Message Container -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <form id="progressForm">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
                         <label>Year</label>
                         <input type="number" name="year" class="input-smooth" value="<%= new Date().getFullYear() %>" required>
                     </div>
-                    <br>
                     <div class="form-group">
                         <label>Month</label>
                         <select name="month" class="input-smooth" required>
@@ -134,19 +154,36 @@
                     <input type="text" name="murajah" class="input-smooth" placeholder="e.g. 10 Juz" required>
                 </div>
 
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Total Class Days Conducted</label>
+                        <input type="number" name="totalClasses" class="input-smooth" placeholder="28" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Days Attended by Student</label>
+                        <input type="number" name="attendedClasses" class="input-smooth" placeholder="25" min="0" required>
+                    </div>
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn" onclick="toggleModal(false)" style="background: #F1F5F9; flex: 1;">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="flex: 2;">Save Progress</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" style="flex: 2;">Save Progress</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+        const modal = document.getElementById('progressModal');
+        const form = document.getElementById('progressForm');
+        const errorDiv = document.getElementById('errorMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
         function toggleModal(show) {
-            const modal = document.getElementById('progressModal');
-            if(show) {
+            if (show) {
                 modal.classList.add('active');
+                errorDiv.style.display = 'none';
+                form.reset();
             } else {
                 modal.classList.remove('active');
             }
@@ -154,11 +191,48 @@
 
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('progressModal');
-            if (event.target == modal) {
-                toggleModal(false);
+            if (event.target === modal) toggleModal(false);
+        };
+
+        // Handle Form Submission with AJAX
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+            errorDiv.style.display = 'none';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(`/hifz/progress/student/<%= student._id %>/add-progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.text();
+
+                if (response.ok) {
+                    // Success - close modal and refresh page
+                    toggleModal(false);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 300);
+                } else {
+                    // Show error message smoothly
+                    errorDiv.textContent = result || "Failed to save progress. Please try again.";
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = "Network error. Please check your connection.";
+                errorDiv.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Progress';
             }
-        }
+        });
     </script>
 </body>
 </html>

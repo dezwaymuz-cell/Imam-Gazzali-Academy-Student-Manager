@@ -57,16 +57,30 @@ const studentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    currentJuz:{
-        type:Number
+    currentJuz: {
+        type: Number
     },
+
+    
     progress: [
         {
-            year: Number,
-            month: String,
-            padam: String,
-            sabkJuz: String,
-            murajah: String
+            year: { type: Number, required: true },
+            month: { type: String, required: true },
+            padam: { type: String, required: true },
+            sabkJuz: { type: String, required: true },
+            murajah: { type: String, required: true },
+
+            // New Attendance Fields
+            totalClasses: {
+                type: Number,
+                default: 0,
+                min: 0
+            },
+            attendedClasses: {
+                type: Number,
+                default: 0,
+                min: 0
+            }
         }
     ],
 }, { timestamps: true });
