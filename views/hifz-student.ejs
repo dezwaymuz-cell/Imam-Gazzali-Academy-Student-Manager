@@ -117,61 +117,62 @@
         </section>
     </div>
 
-    <!-- Add Progress Modal -->
-    <div class="modal" id="progressModal">
-        <div class="modal-content">
-            <h2 style="margin-bottom: 1.5rem; font-weight: 800;">Add Monthly Progress</h2>
-            
-            <!-- Error Message Container -->
-            <div id="errorMessage" class="error-message" style="display: none;"></div>
+   <!-- Add Progress Modal -->
+<div class="modal" id="progressModal">
+    <div class="modal-content">
+        <h2 style="margin-bottom: 1.75rem; font-weight: 800;">Add Monthly Progress</h2>
+        
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
 
-            <form id="progressForm">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Year</label>
-                        <input type="number" name="year" class="input-smooth" value="<%= new Date().getFullYear() %>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Month</label>
-                        <select name="month" class="input-smooth" required>
-                            <% ['January','February','March','April','May','June','July','August','September','October','November','December'].forEach(m => { %>
-                                <option value="<%= m %>" <%= new Date().toLocaleString('default', { month: 'long' }) === m ? 'selected' : '' %>><%= m %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-                </div>
-
+        <form id="progressForm">
+            <!-- Year & Month - now with class for easier targeting -->
+            <div class="grid-2">
                 <div class="form-group">
-                    <label>PADAM (Daily Lesson)</label>
-                    <input type="text" name="padam" class="input-smooth" placeholder="e.g. 5 Pages" required>
+                    <label>Year</label>
+                    <input type="number" name="year" class="input-smooth" value="<%= new Date().getFullYear() %>" required>
                 </div>
                 <div class="form-group">
-                    <label>SABK JUZ</label>
-                    <input type="text" name="sabkJuz" class="input-smooth" placeholder="e.g. 1.5 Juz" required>
+                    <label>Month</label>
+                    <select name="month" class="input-smooth" required>
+                        <% ['January','February','March','April','May','June','July','August','September','October','November','December'].forEach(m => { %>
+                            <option value="<%= m %>" <%= new Date().toLocaleString('default', { month: 'long' }) === m ? 'selected' : '' %>><%= m %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>PADAM (Daily Lesson)</label>
+                <input type="text" name="padam" class="input-smooth" placeholder="e.g. 5 Pages" required>
+            </div>
+            <div class="form-group">
+                <label>SABK JUZ</label>
+                <input type="text" name="sabkJuz" class="input-smooth" placeholder="e.g. 1.5 Juz" required>
+            </div>
+            <div class="form-group">
+                <label>MURAJAH (Revision)</label>
+                <input type="text" name="murajah" class="input-smooth" placeholder="e.g. 10 Juz" required>
+            </div>
+
+            <!-- Total Classes & Attended - now with class -->
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Total Class Days Conducted</label>
+                    <input type="number" name="totalClasses" class="input-smooth" placeholder="28" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label>MURAJAH (Revision)</label>
-                    <input type="text" name="murajah" class="input-smooth" placeholder="e.g. 10 Juz" required>
+                    <label>Days Attended by Student</label>
+                    <input type="number" name="attendedClasses" class="input-smooth" placeholder="25" min="0" required>
                 </div>
+            </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Total Class Days Conducted</label>
-                        <input type="number" name="totalClasses" class="input-smooth" placeholder="28" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Days Attended by Student</label>
-                        <input type="number" name="attendedClasses" class="input-smooth" placeholder="25" min="0" required>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn" onclick="toggleModal(false)" style="background: #F1F5F9; flex: 1;">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn" style="flex: 2;">Save Progress</button>
-                </div>
-            </form>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="toggleModal(false)">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">Save Progress</button>
+            </div>
+        </form>
     </div>
+</div>
 
     <script>
         const modal = document.getElementById('progressModal');
